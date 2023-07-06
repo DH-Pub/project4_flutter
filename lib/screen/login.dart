@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:proj4_flutter/services/auth_login.dart';
+import 'package:proj4_flutter/services/auth_service.dart';
 import 'package:proj4_flutter/shared/gradient_scaffold.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -10,7 +11,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  AuthLogin authController = AuthLogin();
   late bool passwordVisible;
 
   @override
@@ -21,6 +21,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: GradientScaffold(
@@ -44,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 children: [
                   TextFormField(
-                    controller: authController.emailController,
+                    controller: authService.emailController,
                     decoration: const InputDecoration(
                       hintText: 'Email address',
                       // focusedBorder: OutlineInputBorder(),
@@ -53,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 20),
                   TextFormField(
                     obscureText: passwordVisible,
-                    controller: authController.passwordController,
+                    controller: authService.passwordController,
                     decoration: InputDecoration(
                       hintText: "Password",
                       suffixIcon: IconButton(
@@ -67,9 +69,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
+
+                  // Erro Message
+                  Text(
+                    authService.errorMessage,
+                    style: const TextStyle(color: Colors.red),
+                  ),
                   ElevatedButton(
                     onPressed: () {
-                      authController.loginUser();
+                      authService.loginUser();
                     },
                     child: const Text("Login"),
                   ),
