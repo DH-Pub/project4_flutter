@@ -15,26 +15,26 @@ class AppRouter {
 
   late final GoRouter _goRouter = GoRouter(
     refreshListenable: appService,
-    initialLocation: AppPage.userTeams.toPath,
+    initialLocation: APP_PAGE.userTeams.toPath,
     // debugLogDiagnostics: true,
     routes: [
       GoRoute(
-        name: AppPage.splash.toName,
-        path: AppPage.splash.toPath,
+        name: APP_PAGE.splash.toName,
+        path: APP_PAGE.splash.toPath,
         pageBuilder: (context, state) {
           return const MaterialPage(child: SplashScreen());
         },
       ),
       GoRoute(
-        name: AppPage.login.toName,
-        path: AppPage.login.toPath,
+        name: APP_PAGE.login.toName,
+        path: APP_PAGE.login.toPath,
         pageBuilder: (context, state) {
           return const MaterialPage(child: LoginScreen());
         },
       ),
       GoRoute(
-        name: AppPage.userTeams.toName,
-        path: AppPage.userTeams.toPath,
+        name: APP_PAGE.userTeams.toName,
+        path: APP_PAGE.userTeams.toPath,
         pageBuilder: (context, state) {
           return const MaterialPage(child: TeamsScreen());
         },
@@ -48,9 +48,9 @@ class AppRouter {
       );
     },
     redirect: (context, state) {
-      final splashLocation = state.namedLocation(AppPage.splash.toName);
-      final loginLocation = state.namedLocation(AppPage.login.toName);
-      final teamsLocation = state.namedLocation(AppPage.userTeams.toName);
+      final splashLocation = state.namedLocation(APP_PAGE.splash.toName);
+      final loginLocation = state.namedLocation(APP_PAGE.login.toName);
+      final teamsLocation = state.namedLocation(APP_PAGE.userTeams.toName);
 
       final isLogedIn = appService.loginState;
       final isInitialized = appService.initialized;

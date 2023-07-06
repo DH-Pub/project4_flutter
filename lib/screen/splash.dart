@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppPage.splash.toTitle),
+        title: Text(APP_PAGE.splash.toTitle),
       ),
       body: const Center(
         child: CircularProgressIndicator(),
