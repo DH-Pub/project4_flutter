@@ -79,7 +79,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () {
                       authService.loginUser();
                     },
-                    child: const Text("Login"),
+                    child: const Text(
+                      "Login",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ],
               ),

@@ -4,7 +4,7 @@ import 'package:proj4_flutter/routes/route_utils.dart';
 import 'package:proj4_flutter/screen/error.dart';
 import 'package:proj4_flutter/screen/login.dart';
 import 'package:proj4_flutter/screen/splash.dart';
-import 'package:proj4_flutter/screen/teams.dart';
+import 'package:proj4_flutter/screen/teams_screen.dart';
 import 'package:proj4_flutter/services/app_service.dart';
 
 class AppRouter {

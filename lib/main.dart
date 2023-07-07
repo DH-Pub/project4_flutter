@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:proj4_flutter/constants/colors_const.dart';
 import 'package:proj4_flutter/routes/route_configuration.dart';
 import 'package:proj4_flutter/services/app_service.dart';
 import 'package:proj4_flutter/services/auth_service.dart';
@@ -11,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 var kColorSchema = ColorScheme.fromSeed(
   seedColor: const Color.fromARGB(255, 255, 255, 255),
   brightness: Brightness.light,
-  surface: const Color.fromARGB(255, 34, 197, 94),
+  surface: COLOR_CONST.green,
 );
 
 Future<void> main() async {
@@ -40,7 +41,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     appService = AppService(widget.sharedPreferences);
-    authService = AuthService();
+    authService = AuthService(widget.sharedPreferences);
     authSubscription = authService.onAuthStateChange.listen(onAuthStateChagne);
     super.initState();
   }

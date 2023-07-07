@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:proj4_flutter/routes/route_utils.dart';
+import 'package:proj4_flutter/constants/colors_const.dart';
 import 'package:proj4_flutter/services/app_service.dart';
 import 'package:provider/provider.dart';
 
@@ -27,11 +27,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(APP_PAGE.splash.toTitle),
-      ),
       body: const Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(
+          backgroundColor: COLOR_CONST.green1,
+        ),
       ),
     );
   }

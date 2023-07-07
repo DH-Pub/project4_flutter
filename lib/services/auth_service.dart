@@ -10,10 +10,9 @@ class AuthService {
   final StreamController<bool> _onAuthStateChange = StreamController.broadcast();
   Stream<bool> get onAuthStateChange => _onAuthStateChange.stream;
 
-  static late SharedPreferences prefs;
-  Future init() async {
-    prefs = await SharedPreferences.getInstance();
-  }
+  late final SharedPreferences prefs;
+
+  AuthService(this.prefs);
 
   Dio api = Dio();
   TextEditingController emailController = TextEditingController();

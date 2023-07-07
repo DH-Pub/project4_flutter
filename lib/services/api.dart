@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:proj4_flutter/constants/api_const.dart';
 import 'package:proj4_flutter/constants/storage_key.dart';
@@ -7,10 +9,9 @@ class Api {
   Dio api = Dio();
   String? accessToken;
 
-  static late SharedPreferences prefs;
-  Future init() async {
-    prefs = await SharedPreferences.getInstance();
-  }
+  final StreamController<bool> _onAuthStateChange = StreamController.broadcast();
+  Stream<bool> get onAuthStateChange => _onAuthStateChange.stream;
+  late SharedPreferences prefs;
 
   Api() {
     api.interceptors.add(QueuedInterceptorsWrapper(
@@ -18,7 +19,7 @@ class Api {
         if (!options.path.contains('http')) {
           options.path = API_CONSTANTS.baseUrl + options.path;
         }
-
+        prefs = await SharedPreferences.getInstance();
         accessToken = prefs.getString(StorageKey.token);
 
         options.headers['Authorization'] = 'Bearer $accessToken';
@@ -53,10 +54,14 @@ class Api {
     final refreshToken = prefs.getString(StorageKey.refreshToken);
     final response = await api.post('/auth/refreshtoken', data: {'refreshToken': refreshToken});
     if (response.statusCode == 200) {
-      accessToken = response.data;
+      accessToken = response.data["token"];
+      String refreshToken = response.data["refreshToken"];
+      prefs.setString(StorageKey.token, accessToken!);
+      prefs.setString(StorageKey.refreshToken, refreshToken);
     } else {
       accessToken = null;
       prefs.clear();
+      _onAuthStateChange.add(false);
     }
   }
 }

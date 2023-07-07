@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proj4_flutter/constants/colors_const.dart';
 
 class GradientScaffold extends StatelessWidget {
   const GradientScaffold({super.key, required this.body});
@@ -11,9 +12,9 @@ class GradientScaffold extends StatelessWidget {
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [
-        Color.fromRGBO(38, 187, 152, 1),
-        Color.fromRGBO(12, 240, 187, 1),
-        Color.fromRGBO(255, 186, 73, 1),
+        COLOR_CONST.green1,
+        COLOR_CONST.green2,
+        COLOR_CONST.yellow,
       ],
     );
     // LinearGradient gradient2 = LinearGradient(
@@ -30,6 +31,8 @@ class GradientScaffold extends StatelessWidget {
 
     return Scaffold(
       body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(gradient: gradient1),
         child: body,
       ),
