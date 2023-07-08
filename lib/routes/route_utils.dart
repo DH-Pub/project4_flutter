@@ -8,6 +8,8 @@ enum APP_PAGE {
   // after create or select team
   home,
   team,
+  account,
+  projects,
 }
 
 extension AppPageExtension on APP_PAGE {
@@ -20,6 +22,8 @@ extension AppPageExtension on APP_PAGE {
     // after create/select team
     APP_PAGE.home: "/",
     APP_PAGE.team: "/team",
+    APP_PAGE.account: "/account",
+    APP_PAGE.projects: "/projects",
   };
   String get toPath {
     return pathMap[this] ?? '/';
@@ -34,6 +38,8 @@ extension AppPageExtension on APP_PAGE {
     // after create/select team
     APP_PAGE.home: "HOME",
     APP_PAGE.team: "TEAM",
+    APP_PAGE.account: "ACCOUNT",
+    APP_PAGE.projects: "PROJECTS",
   };
   String get toName {
     return namePath[this] ?? '/';
@@ -46,8 +52,10 @@ extension AppPageExtension on APP_PAGE {
     APP_PAGE.error: "Error",
     APP_PAGE.userTeams: "Your teams",
     // after create/select team
-    APP_PAGE.home: "Home",
+    APP_PAGE.home: "Your Tasks",
     APP_PAGE.team: "Team",
+    APP_PAGE.account: "Account Settings",
+    APP_PAGE.projects: "Projects",
   };
   String get toTitle {
     return titlePath[this] ?? '/';

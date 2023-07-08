@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:proj4_flutter/constants/api_const.dart';
 import 'package:proj4_flutter/constants/storage_key.dart';
 import 'package:proj4_flutter/models/team.dart';
+import 'package:proj4_flutter/models/team_member.dart';
 import 'package:proj4_flutter/services/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,6 +21,10 @@ class TeamController {
 
   Team getTeamInPrefs() {
     return Team.fromJson(json.decode(prefs.getString(StorageKey.team) ?? ''));
+  }
+
+  TeamMemberDetail getCurrentMemberInPrefs() {
+    return TeamMemberDetail.fromJson(json.decode(prefs.getString(StorageKey.currentMember) ?? ''));
   }
 
   Future<bool> setTeamInPrefs(Team team) async {
@@ -70,7 +75,28 @@ class TeamController {
           StorageKey.team,
           json.encode(team.toJson()),
         );
+        await getCurrentMember();
         return team;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      errMsg = "Error";
+      return null;
+    }
+  }
+
+  Future<TeamMemberDetail?> getCurrentMember() async {
+    try {
+      Team currentTeam = Team.fromJson(json.decode(prefs.getString(StorageKey.team) ?? ''));
+      var res = await team.api.get("${API_CONSTANTS.team}/${currentTeam.id}/current-member");
+      if (res.statusCode == 200) {
+        TeamMemberDetail currentMember = TeamMemberDetail.fromJson(res.data);
+        prefs.setString(
+          StorageKey.currentMember,
+          json.encode(currentMember.toJson()),
+        );
+        return currentMember;
       } else {
         return null;
       }

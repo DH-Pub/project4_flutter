@@ -6,4 +6,5 @@ class COLOR_CONST {
   static const Color green1 = Color.fromRGBO(38, 187, 152, 1);
   static const Color green2 = Color.fromRGBO(12, 240, 187, 1);
   static const Color yellow = Color.fromRGBO(255, 186, 73, 1);
+  static const Color grey = Color.fromARGB(181, 158, 158, 158);
 }

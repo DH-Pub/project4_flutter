@@ -39,7 +39,7 @@ class _CreateTeamFormState extends State<CreateTeamForm> {
         ElevatedButton(
           onPressed: () {
             teamCtrl.createTeam().then((_) {
-              GoRouter.of(context).goNamed(APP_PAGE.home.toName);
+              context.goNamed(APP_PAGE.home.toName);
             });
           },
           child: const Text(
