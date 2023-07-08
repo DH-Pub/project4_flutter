@@ -18,7 +18,7 @@ extension AppPageExtension on APP_PAGE {
     APP_PAGE.error: "/error",
     APP_PAGE.userTeams: "/user-teams",
     // after create/select team
-    APP_PAGE.home: "/home",
+    APP_PAGE.home: "/",
     APP_PAGE.team: "/team",
   };
   String get toPath {

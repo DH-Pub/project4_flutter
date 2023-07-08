@@ -15,7 +15,7 @@ class Team {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'temteName': teamName,
+      'teamName': teamName,
       'description': description,
       'createdAt': createdAt,
     };

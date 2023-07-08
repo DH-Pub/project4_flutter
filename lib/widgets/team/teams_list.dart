@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:proj4_flutter/controllers/team_controllers.dart';
 import 'package:proj4_flutter/models/team.dart';
+import 'package:proj4_flutter/routes/route_utils.dart';
 
 class TeamsList extends StatelessWidget {
   final List<UserTeam> teams;
@@ -12,7 +15,19 @@ class TeamsList extends StatelessWidget {
       itemBuilder: (context, index) => Container(
         margin: const EdgeInsets.symmetric(vertical: 5.0),
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Team team = Team(
+              teams[index].teamId,
+              teams[index].teamName,
+              teams[index].teamDescription,
+              teams[index].teamCreatedAt,
+            );
+            TeamController teamController = TeamController();
+            teamController.setTeamInPrefs(team).then((_) {
+              // GoRouter.of(context).goNamed(APP_PAGE.home.toName);
+              context.goNamed(APP_PAGE.home.toName);
+            });
+          },
           child: Text(
             teams[index].teamName,
             textAlign: TextAlign.center,

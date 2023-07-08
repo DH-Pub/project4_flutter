@@ -22,6 +22,18 @@ class TeamController {
     return Team.fromJson(json.decode(prefs.getString(StorageKey.team) ?? ''));
   }
 
+  Future<bool> setTeamInPrefs(Team team) async {
+    initPrefs().then((_) {
+      prefs.setString(
+        StorageKey.team,
+        json.encode(team.toJson()),
+      );
+    }).catchError((e) {
+      return null;
+    });
+    return true;
+  }
+
   Future<List<UserTeam>?> getUserTeams() async {
     try {
       var res = await team.api.get("${API_CONSTANTS.team}/user");
