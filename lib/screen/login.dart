@@ -70,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Erro Message
+                  // Error Message
                   Text(
                     authService.errorMessage,
                     style: const TextStyle(color: Colors.red),

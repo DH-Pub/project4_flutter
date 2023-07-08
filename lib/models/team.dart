@@ -1,3 +1,27 @@
+class Team {
+  String id = '';
+  String teamName = '';
+  String description = '';
+  String createdAt = '';
+
+  Team(this.id, this.teamName, this.description, this.createdAt);
+  Team.fromJson(Map<String, dynamic> team) {
+    id = team["id"] ?? '';
+    teamName = team["teamName"] ?? '';
+    description = team["description"] ?? '';
+    createdAt = team["createdAt"] ?? '';
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'temteName': teamName,
+      'description': description,
+      'createdAt': createdAt,
+    };
+  }
+}
+
 class UserTeam {
   int teamMemberId = 0;
   String teamId = '';

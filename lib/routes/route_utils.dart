@@ -5,7 +5,8 @@ enum APP_PAGE {
   signup,
   error,
   userTeams,
-  createTeam,
+  // after create or select team
+  home,
   team,
 }
 
@@ -16,7 +17,8 @@ extension AppPageExtension on APP_PAGE {
     APP_PAGE.signup: "/signup",
     APP_PAGE.error: "/error",
     APP_PAGE.userTeams: "/user-teams",
-    APP_PAGE.createTeam: "/create-team",
+    // after create/select team
+    APP_PAGE.home: "/home",
     APP_PAGE.team: "/team",
   };
   String get toPath {
@@ -29,7 +31,8 @@ extension AppPageExtension on APP_PAGE {
     APP_PAGE.signup: "SIGNUP",
     APP_PAGE.error: "ERROR",
     APP_PAGE.userTeams: "USER_TEAMS",
-    APP_PAGE.createTeam: "CREATE_TEAM",
+    // after create/select team
+    APP_PAGE.home: "HOME",
     APP_PAGE.team: "TEAM",
   };
   String get toName {
@@ -42,7 +45,8 @@ extension AppPageExtension on APP_PAGE {
     APP_PAGE.signup: "Signup",
     APP_PAGE.error: "Error",
     APP_PAGE.userTeams: "Your teams",
-    APP_PAGE.createTeam: "Create a team",
+    // after create/select team
+    APP_PAGE.home: "Home",
     APP_PAGE.team: "Team",
   };
   String get toTitle {

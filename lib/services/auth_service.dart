@@ -21,7 +21,11 @@ class AuthService {
 
   Future<bool> loginUser() async {
     const url = '${API_CONSTANTS.baseUrl}/auth/login';
-
+    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+      errorMessage = "Email and password cannot be empty";
+      _onAuthStateChange.add(false);
+      return false;
+    }
     try {
       var response = await api.post(url, data: {
         "username": emailController.text,

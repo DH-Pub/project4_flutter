@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proj4_flutter/routes/route_utils.dart';
 import 'package:proj4_flutter/screen/error.dart';
+import 'package:proj4_flutter/screen/home_screen.dart';
 import 'package:proj4_flutter/screen/login.dart';
 import 'package:proj4_flutter/screen/splash.dart';
 import 'package:proj4_flutter/screen/teams_screen.dart';
@@ -37,6 +38,13 @@ class AppRouter {
         path: APP_PAGE.userTeams.toPath,
         pageBuilder: (context, state) {
           return const MaterialPage(child: TeamsScreen());
+        },
+      ),
+      GoRoute(
+        name: APP_PAGE.home.toName,
+        path: APP_PAGE.home.toPath,
+        pageBuilder: (context, state) {
+          return const MaterialPage(child: HomeScreen());
         },
       ),
     ],

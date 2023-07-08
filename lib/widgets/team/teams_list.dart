@@ -9,17 +9,14 @@ class TeamsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: teams.length,
-      itemBuilder: (context, index) => Card(
-        margin: const EdgeInsets.symmetric(vertical: 10),
+      itemBuilder: (context, index) => Container(
+        margin: const EdgeInsets.symmetric(vertical: 5.0),
         child: ElevatedButton(
           onPressed: () {},
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            child: Text(
-              teams[index].teamName,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            ),
+          child: Text(
+            teams[index].teamName,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.white, fontSize: 20),
           ),
         ),
       ),
