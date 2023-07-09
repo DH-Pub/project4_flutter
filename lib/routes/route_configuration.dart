@@ -5,6 +5,7 @@ import 'package:proj4_flutter/screen/error.dart';
 import 'package:proj4_flutter/screen/home_screen.dart';
 import 'package:proj4_flutter/screen/login.dart';
 import 'package:proj4_flutter/screen/splash.dart';
+import 'package:proj4_flutter/screen/team_detail.dart';
 import 'package:proj4_flutter/screen/teams_screen.dart';
 import 'package:proj4_flutter/services/app_service.dart';
 
@@ -45,6 +46,13 @@ class AppRouter {
         path: APP_PAGE.home.toPath,
         pageBuilder: (context, state) {
           return const MaterialPage(child: HomeScreen());
+        },
+      ),
+      GoRoute(
+        name: APP_PAGE.team.toName,
+        path: APP_PAGE.team.toPath,
+        pageBuilder: (context, state) {
+          return const MaterialPage(child: TeamDetail());
         },
       ),
     ],

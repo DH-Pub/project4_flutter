@@ -86,6 +86,35 @@ class TeamController {
     }
   }
 
+  Future<Team?> updateTeam(id) async {
+    if (teamNameController.text.isEmpty) {
+      errMsg = "Team name cannot be empty";
+      return null;
+    }
+    try {
+      var res = await team.api.put("${API_CONSTANTS.team}/update", data: {
+        "id": id,
+        "teamName": teamNameController.text,
+        "description": descriptionController.text,
+      });
+      if (res.statusCode == 200) {
+        Team team = Team.fromJson(res.data);
+        prefs = await SharedPreferences.getInstance();
+        prefs.setString(
+          StorageKey.team,
+          json.encode(team.toJson()),
+        );
+        await getCurrentMember();
+        return team;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      errMsg = "Error";
+      return null;
+    }
+  }
+
   Future<TeamMemberDetail?> getCurrentMember() async {
     try {
       Team currentTeam = Team.fromJson(json.decode(prefs.getString(StorageKey.team) ?? ''));

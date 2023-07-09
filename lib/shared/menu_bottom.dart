@@ -29,7 +29,7 @@ class MenuBottom extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: const Icon(
-            Icons.cases,
+            Icons.list,
             color: COLOR_CONST.grey,
           ),
           label: APP_PAGE.projects.toTitle,
