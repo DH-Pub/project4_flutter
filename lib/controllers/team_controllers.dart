@@ -134,4 +134,26 @@ class TeamController {
       return null;
     }
   }
+
+  Future<List<TeamMemberDetail>?> getAllMembersDetails() async {
+    try {
+      Team currentTeam = Team.fromJson(json.decode(prefs.getString(StorageKey.team) ?? ''));
+      var res = await team.api.get("${API_CONSTANTS.team}/${currentTeam.id}/all-members-details");
+      if (res.statusCode == 200) {
+        List<dynamic> data = res.data;
+        List<TeamMemberDetail> members = [];
+        for (Map<String, dynamic> m in data) {
+          TeamMemberDetail member = TeamMemberDetail.fromJson(m);
+          members.add(member);
+        }
+        return members;
+      } else {
+        errMsg = "Error";
+        return null;
+      }
+    } catch (e) {
+      errMsg = "Error";
+      return null;
+    }
+  }
 }

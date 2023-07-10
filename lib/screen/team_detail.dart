@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:proj4_flutter/constants/colors_const.dart';
 import 'package:proj4_flutter/constants/team_member_role.dart';
 import 'package:proj4_flutter/controllers/team_controllers.dart';
 import 'package:proj4_flutter/models/team.dart';
 import 'package:proj4_flutter/models/team_member.dart';
+import 'package:proj4_flutter/routes/route_utils.dart';
 import 'package:proj4_flutter/shared/menu_bottom.dart';
 import 'package:proj4_flutter/shared/menu_drawer.dart';
 
@@ -38,6 +40,13 @@ class _TeamDetailsStat extends State<TeamDetail> {
         appBar: AppBar(
           foregroundColor: Colors.white,
           title: Text(team.teamName),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  context.go(APP_PAGE.members.toPath);
+                },
+                icon: const Icon(Icons.supervised_user_circle_sharp)),
+          ],
         ),
         drawer: const MenuDrawer(),
         bottomNavigationBar: const MenuBottom(),

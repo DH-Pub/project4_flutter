@@ -8,6 +8,7 @@ enum APP_PAGE {
   // after create or select team
   home,
   team,
+  members,
   account,
   projects,
 }
@@ -22,6 +23,7 @@ extension AppPageExtension on APP_PAGE {
     // after create/select team
     APP_PAGE.home: "/",
     APP_PAGE.team: "/team",
+    APP_PAGE.members: "/members",
     APP_PAGE.account: "/account",
     APP_PAGE.projects: "/projects",
   };
@@ -38,6 +40,7 @@ extension AppPageExtension on APP_PAGE {
     // after create/select team
     APP_PAGE.home: "HOME",
     APP_PAGE.team: "TEAM",
+    APP_PAGE.members: "MEMBERS",
     APP_PAGE.account: "ACCOUNT",
     APP_PAGE.projects: "PROJECTS",
   };
@@ -54,6 +57,7 @@ extension AppPageExtension on APP_PAGE {
     // after create/select team
     APP_PAGE.home: "Your Tasks",
     APP_PAGE.team: "Team",
+    APP_PAGE.members: "Members",
     APP_PAGE.account: "Account Settings",
     APP_PAGE.projects: "Projects",
   };

@@ -47,9 +47,11 @@ class _TeamsScreenState extends State<TeamsScreen> {
     final height = MediaQuery.of(context).size.height;
 
     if (teams == null) {
-      mainContent = const Text(
-        "Error",
-        style: TextStyle(color: Colors.red),
+      mainContent = const Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(),
+        ],
       );
     } else {
       if (teams!.isNotEmpty) {

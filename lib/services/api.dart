@@ -27,6 +27,7 @@ class Api {
       },
       onError: (DioException error, handler) async {
         if (error.response?.statusCode == 401) {
+          // if sp has the refresh token
           if (prefs.containsKey(StorageKey.refreshToken)) {
             await refreshToken();
             return handler.resolve(await _retry(error.requestOptions));
