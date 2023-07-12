@@ -12,6 +12,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   late bool passwordVisible;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   void initState() {
@@ -46,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 children: [
                   TextFormField(
-                    controller: authService.emailController,
+                    controller: emailController,
                     decoration: const InputDecoration(
                       hintText: 'Email address',
                       // focusedBorder: OutlineInputBorder(),
@@ -55,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 20),
                   TextFormField(
                     obscureText: passwordVisible,
-                    controller: authService.passwordController,
+                    controller: passwordController,
                     decoration: InputDecoration(
                       hintText: "Password",
                       suffixIcon: IconButton(
@@ -77,7 +79,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      authService.loginUser();
+                      authService.loginUser(emailController.text, passwordController.text).then((value) {
+                        setState(() {});
+                      });
                     },
                     child: const Text(
                       "Login",

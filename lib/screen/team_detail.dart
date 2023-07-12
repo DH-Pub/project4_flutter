@@ -20,6 +20,8 @@ class _TeamDetailsStat extends State<TeamDetail> {
   TeamController teamController = TeamController();
   Team team = Team('', '', '', '');
   TeamMemberDetail currentMember = TeamMemberDetail(0, '', '', '', '', '', '', '', '');
+  bool isCreator = false;
+
   @override
   void initState() {
     teamController.initPrefs().then((_) {
@@ -27,6 +29,7 @@ class _TeamDetailsStat extends State<TeamDetail> {
       teamController.teamNameController.text = team.teamName;
       teamController.descriptionController.text = team.description;
       currentMember = teamController.getCurrentMemberInPrefs();
+      isCreator = currentMember.teamMemberRole == TeamMemberRole.CREATOR.name;
       setState(() {});
     });
     super.initState();
@@ -38,6 +41,7 @@ class _TeamDetailsStat extends State<TeamDetail> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: AppBar(
+          // automaticallyImplyLeading: false,
           foregroundColor: Colors.white,
           title: Text(team.teamName),
           actions: [
@@ -55,7 +59,7 @@ class _TeamDetailsStat extends State<TeamDetail> {
           child: Column(
             children: [
               TextFormField(
-                enabled: currentMember.teamMemberRole != TeamMemberRole.CREATOR.toString(),
+                enabled: isCreator,
                 controller: teamController.teamNameController,
                 decoration: const InputDecoration(
                   labelText: "Team name",
@@ -63,7 +67,7 @@ class _TeamDetailsStat extends State<TeamDetail> {
               ),
               const SizedBox(height: 20),
               TextFormField(
-                enabled: currentMember.teamMemberRole != TeamMemberRole.CREATOR.toString(),
+                enabled: isCreator,
                 controller: teamController.descriptionController,
                 decoration: const InputDecoration(
                   labelText: "Description",

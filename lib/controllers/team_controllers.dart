@@ -156,4 +156,42 @@ class TeamController {
       return null;
     }
   }
+
+  Future<TeamMember?> addMember(String email, String teamRole) async {
+    try {
+      String teamId;
+      await initPrefs();
+      teamId = getTeamInPrefs().id;
+      var res = await team.api.post("${API_CONSTANTS.team}/add-member", data: {
+        "email": email,
+        "teamId": teamId,
+        "role": teamRole,
+      });
+      if (res.statusCode == 200) {
+        TeamMember member = TeamMember.fromJson(res.data);
+        return member;
+      } else {
+        errMsg = "Error";
+        return null;
+      }
+    } catch (e) {
+      errMsg = "Error";
+      return null;
+    }
+  }
+
+  Future<bool?> removeMember(id) async {
+    try {
+      var res = await team.api.delete("${API_CONSTANTS.team}/remove-member/$id");
+      if (res.statusCode == 200) {
+        return res.data;
+      } else {
+        errMsg = "Error";
+        return null;
+      }
+    } catch (e) {
+      errMsg = "Error";
+      return null;
+    }
+  }
 }
