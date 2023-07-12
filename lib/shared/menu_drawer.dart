@@ -34,7 +34,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
     return Drawer(
-      backgroundColor: Color.fromRGBO(17, 24, 39, 1),
+      backgroundColor: const Color.fromRGBO(17, 24, 39, 1),
       child: ListView(
         children: buildMenuItems(context, authService),
       ),

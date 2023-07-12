@@ -10,6 +10,8 @@ class MembersList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      shrinkWrap: true,
+      physics: const ClampingScrollPhysics(),
       itemCount: members.length,
       itemBuilder: (context, index) {
         TeamMemberDetail mem = members[index];

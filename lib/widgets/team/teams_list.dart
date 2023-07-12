@@ -11,6 +11,8 @@ class TeamsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      shrinkWrap: true,
+      physics: const ClampingScrollPhysics(),
       itemCount: teams.length,
       itemBuilder: (context, index) => Container(
         margin: const EdgeInsets.symmetric(vertical: 5.0),
