@@ -27,7 +27,6 @@ class TeamsList extends StatelessWidget {
             TeamController teamController = TeamController();
             teamController.setTeamInPrefs(team).then((_) {
               teamController.getCurrentMember().then((value) {
-                // GoRouter.of(context).goNamed(APP_PAGE.home.toName);
                 context.goNamed(APP_PAGE.home.toName);
               });
             });

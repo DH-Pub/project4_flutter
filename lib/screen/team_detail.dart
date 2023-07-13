@@ -101,6 +101,34 @@ class _TeamDetailsStat extends State<TeamDetail> {
             color: Colors.white,
           ),
         ),
+        persistentFooterButtons: [
+          Padding(
+            padding: const EdgeInsets.only(top: 40),
+            child: TextButton(
+              onPressed: () {
+                teamController.updateTeam(team.id).then((value) {
+                  if (value != null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Saved")),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text(
+                        "Error",
+                        style: TextStyle(color: Colors.red),
+                      )),
+                    );
+                  }
+                });
+              },
+              child: const Icon(
+                Icons.delete,
+                color: Colors.red,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -34,7 +34,7 @@ class _MyAppState extends State<MyApp> {
   late AuthService authService;
   late StreamSubscription<bool> authSubscription;
 
-  void onAuthStateChagne(bool login) {
+  void onAuthStateChange(bool login) {
     appService.loginState = login;
   }
 
@@ -42,7 +42,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     appService = AppService(widget.sharedPreferences);
     authService = AuthService(widget.sharedPreferences);
-    authSubscription = authService.onAuthStateChange.listen(onAuthStateChagne);
+    authSubscription = authService.onAuthStateChange.listen(onAuthStateChange);
     super.initState();
   }
 

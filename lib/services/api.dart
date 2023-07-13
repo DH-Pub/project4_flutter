@@ -1,16 +1,16 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:proj4_flutter/constants/api_const.dart';
 import 'package:proj4_flutter/constants/storage_key.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Api {
+class Api extends ChangeNotifier {
   Dio api = Dio();
+  Dio refresh = Dio();
   String? accessToken;
 
-  final StreamController<bool> _onAuthStateChange = StreamController.broadcast();
-  Stream<bool> get onAuthStateChange => _onAuthStateChange.stream;
   late SharedPreferences prefs;
 
   Api() {
@@ -29,9 +29,12 @@ class Api {
         if (error.response?.statusCode == 401) {
           // if sp has the refresh token
           if (prefs.containsKey(StorageKey.refreshToken)) {
-            await refreshToken();
-            return handler.resolve(await _retry(error.requestOptions));
+            if (await refreshToken()) {
+              return handler.resolve(await _retry(error.requestOptions));
+            }
           }
+          accessToken = null;
+          prefs.clear();
         }
         return handler.next(error);
       },
@@ -51,18 +54,24 @@ class Api {
     );
   }
 
-  Future<void> refreshToken() async {
-    final refreshToken = prefs.getString(StorageKey.refreshToken);
-    final response = await api.post('/auth/refreshtoken', data: {'refreshToken': refreshToken});
-    if (response.statusCode == 200) {
-      accessToken = response.data["token"];
-      String refreshToken = response.data["refreshToken"];
-      prefs.setString(StorageKey.token, accessToken!);
-      prefs.setString(StorageKey.refreshToken, refreshToken);
-    } else {
-      accessToken = null;
-      prefs.clear();
-      _onAuthStateChange.add(false);
+  Future<bool> refreshToken() async {
+    try {
+      final refreshToken = prefs.getString(StorageKey.refreshToken);
+      final response = await refresh.post(
+        '${API_CONSTANTS.baseUrl}/auth/refreshtoken',
+        data: {'refreshToken': refreshToken},
+      );
+      if (response.statusCode == 200) {
+        accessToken = response.data["token"];
+        String refreshToken = response.data["refreshToken"];
+        prefs.setString(StorageKey.token, accessToken!);
+        prefs.setString(StorageKey.refreshToken, refreshToken);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
     }
   }
 }
