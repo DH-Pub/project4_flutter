@@ -18,13 +18,14 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     passwordVisible = true;
+
+    setState(() {});
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
-
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: GradientScaffold(
@@ -79,6 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
+                      // FocusManager.instance.primaryFocus?.unfocus();
                       authService.loginUser(emailController.text, passwordController.text).then((value) {
                         setState(() {});
                       });

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proj4_flutter/constants/colors_const.dart';
 import 'package:proj4_flutter/constants/team_member_role.dart';
@@ -22,6 +23,8 @@ class _TeamDetailsStat extends State<TeamDetail> {
   TeamMemberDetail currentMember = TeamMemberDetail(0, '', '', '', '', '', '', '', '');
   bool isCreator = false;
 
+  TextEditingController confirmTxt = TextEditingController();
+  String? confirm;
   @override
   void initState() {
     teamController.initPrefs().then((_) {
@@ -30,6 +33,8 @@ class _TeamDetailsStat extends State<TeamDetail> {
       teamController.descriptionController.text = team.description;
       currentMember = teamController.getCurrentMemberInPrefs();
       isCreator = currentMember.teamMemberRole == TeamMemberRole.CREATOR.name;
+
+      confirm = "I want to delete team ${team.teamName}";
       setState(() {});
     });
     super.initState();
@@ -102,34 +107,83 @@ class _TeamDetailsStat extends State<TeamDetail> {
           ),
         ),
         persistentFooterButtons: [
-          Padding(
-            padding: const EdgeInsets.only(top: 40),
-            child: TextButton(
-              onPressed: () {
-                teamController.updateTeam(team.id).then((value) {
-                  if (value != null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Saved")),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text(
-                        "Error",
-                        style: TextStyle(color: Colors.red),
-                      )),
-                    );
-                  }
-                });
-              },
-              child: const Icon(
-                Icons.delete,
-                color: Colors.red,
-              ),
-            ),
-          ),
+          isCreator
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 40),
+                  child: TextButton(
+                    onPressed: () {
+                      _showDeleteDialog(context);
+                    },
+                    child: const Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                    ),
+                  ),
+                )
+              : const SizedBox(),
         ],
       ),
+    );
+  }
+
+  Future<void> _showDeleteDialog(context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(
+            child: Column(
+              children: [
+                Text.rich(
+                  TextSpan(
+                    text: "Please enter ",
+                    style: const TextStyle(fontSize: 16),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: confirm,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          backgroundColor: Color.fromARGB(255, 190, 190, 190),
+                        ),
+                      ),
+                      const TextSpan(text: " to delete the team"),
+                    ],
+                  ),
+                ),
+                TextFormField(
+                  enabled: isCreator,
+                  controller: confirmTxt,
+                ),
+              ],
+            ),
+          ),
+          contentPadding: const EdgeInsets.all(8),
+          actions: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              onPressed: () {
+                if (confirm == confirmTxt.text) {
+                  teamController.deleteTeam(team.id).then((value) {
+                    // FocusManager.instance.primaryFocus?.unfocus();
+                    if (value == true) {
+                      Navigator.pop(context);
+                      context.go(APP_PAGE.userTeams.toPath);
+                    }
+                  });
+                }
+              },
+              child: const Text(
+                "Remove",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel"),
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -10,6 +10,7 @@ class MembersList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       shrinkWrap: true,
       physics: const ClampingScrollPhysics(),
       itemCount: members.length,

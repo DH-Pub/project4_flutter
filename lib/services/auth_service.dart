@@ -49,6 +49,7 @@ class AuthService {
   }
 
   void logOut() {
+    errorMessage = "";
     _onAuthStateChange.add(false);
   }
 }

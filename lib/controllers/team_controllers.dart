@@ -107,6 +107,22 @@ class TeamController {
         await getCurrentMember();
         return team;
       } else {
+        errMsg = "Error";
+        return null;
+      }
+    } catch (e) {
+      errMsg = "Error";
+      return null;
+    }
+  }
+
+  Future<bool?> deleteTeam(id) async {
+    try {
+      var res = await team.api.delete("${API_CONSTANTS.team}/delete/$id");
+      if (res.statusCode == 200) {
+        return res.data;
+      } else {
+        errMsg = "Error";
         return null;
       }
     } catch (e) {
