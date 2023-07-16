@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:proj4_flutter/services/auth_service.dart';
 import 'package:proj4_flutter/shared/gradient_scaffold.dart';
-import 'package:provider/provider.dart';
+import 'package:proj4_flutter/widgets/user/login_form.dart';
+import 'package:proj4_flutter/widgets/user/signup_form.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,89 +11,59 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  late bool passwordVisible;
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  bool isLoginForm = true;
+  Widget mainContent = const CircularProgressIndicator();
 
-  @override
-  void initState() {
-    passwordVisible = true;
-
+  void changeForm() {
+    isLoginForm = !isLoginForm;
     setState(() {});
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: GradientScaffold(
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              margin: const EdgeInsets.all(40),
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color.fromARGB(184, 184, 184, 184),
-                    blurRadius: 3.0,
-                    offset: Offset(2.0, 2.0),
-                  )
-                ],
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.all(40),
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color.fromARGB(184, 184, 184, 184),
+                      blurRadius: 3.0,
+                      offset: Offset(2.0, 2.0),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    isLoginForm
+                        ? const LoginForm()
+                        : SignupForm(
+                            changeForm: changeForm,
+                          ),
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          isLoginForm = !isLoginForm;
+                        });
+                      },
+                      child: isLoginForm
+                          ? const Text("Don't have an account? Sign up")
+                          : const Text("Already have an account? Login"),
+                    )
+                  ],
+                ),
               ),
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: emailController,
-                    decoration: const InputDecoration(
-                      hintText: 'Email address',
-                      // focusedBorder: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    obscureText: passwordVisible,
-                    controller: passwordController,
-                    decoration: InputDecoration(
-                      hintText: "Password",
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            passwordVisible = !passwordVisible;
-                          });
-                        },
-                        icon: Icon(passwordVisible ? Icons.visibility : Icons.visibility_off),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Error Message
-                  Text(
-                    authService.errorMessage,
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // FocusManager.instance.primaryFocus?.unfocus();
-                      authService.loginUser(emailController.text, passwordController.text).then((value) {
-                        setState(() {});
-                      });
-                    },
-                    child: const Text(
-                      "Login",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
