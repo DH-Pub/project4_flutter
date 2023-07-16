@@ -49,11 +49,10 @@ class UserController {
       'user': MultipartFile.fromString(userDetail, contentType: MediaType.parse('application/json')),
     });
     User? result;
-    await dio.post("${API_CONSTANTS.user}/signup", data: formData).then((value) {
-      result = User.fromJson(value.data);
-    }).catchError((err) {
-      errMsg = err.response.data;
-    });
+    await dio
+        .post("${API_CONSTANTS.user}/signup", data: formData)
+        .then((value) => result = User.fromJson(value.data))
+        .catchError((err) => errMsg = err.response.data);
     return result;
   }
 
@@ -63,6 +62,23 @@ class UserController {
         .get("${API_CONSTANTS.user}/account")
         .then((value) => result = User.fromJson(value.data))
         .catchError((err) => errMsg = err?.response?.data);
+    return result;
+  }
+
+  Future<User?> updateAccount() async {
+    errMsg = '';
+    final userDetail = json.encode({
+      "username": usernameController.text,
+      "bio": bioController.text,
+    });
+    final formData = FormData.fromMap({
+      'user': MultipartFile.fromString(userDetail, contentType: MediaType.parse('application/json')),
+    });
+    User? result;
+    await userApi.api
+        .put("${API_CONSTANTS.user}/user/update", data: formData)
+        .then((value) => result = User.fromJson(value.data))
+        .catchError((e) => errMsg = e.response.data);
     return result;
   }
 }
