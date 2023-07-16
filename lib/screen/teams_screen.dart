@@ -62,64 +62,66 @@ class _TeamsScreenState extends State<TeamsScreen> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: GradientScaffold(
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              margin: const EdgeInsets.all(20),
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color.fromARGB(184, 184, 184, 184),
-                    blurRadius: 3.0,
-                    offset: Offset(2.0, 2.0),
-                  )
-                ],
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      const Spacer(),
-                      Expanded(
-                        child: isCreate
-                            ? IconButton(
-                                alignment: Alignment.topRight,
-                                onPressed: () {
-                                  setState(() {
-                                    isCreate = false;
-                                  });
-                                },
-                                icon: const Icon(
-                                  Icons.cancel_outlined,
-                                  color: Color.fromARGB(157, 158, 158, 158),
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color.fromARGB(184, 184, 184, 184),
+                      blurRadius: 3.0,
+                      offset: Offset(2.0, 2.0),
+                    )
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        const Spacer(),
+                        Expanded(
+                          child: isCreate
+                              ? IconButton(
+                                  alignment: Alignment.topRight,
+                                  onPressed: () {
+                                    setState(() {
+                                      isCreate = false;
+                                    });
+                                  },
+                                  icon: const Icon(
+                                    Icons.cancel_outlined,
+                                    color: Color.fromARGB(157, 158, 158, 158),
+                                  ),
+                                )
+                              : TextButton.icon(
+                                  onPressed: () {
+                                    setState(() {
+                                      isCreate = true;
+                                    });
+                                  },
+                                  icon: const Icon(Icons.add),
+                                  label: const Text("Create a Team"),
                                 ),
-                              )
-                            : TextButton.icon(
-                                onPressed: () {
-                                  setState(() {
-                                    isCreate = true;
-                                  });
-                                },
-                                icon: const Icon(Icons.add),
-                                label: const Text("Create a Team"),
-                              ),
-                      ),
-                    ],
-                  ),
-                  isCreate
-                      ? const CreateTeamForm()
-                      : SizedBox(
-                          height: height - 100 < 550 ? height - 100 : 550,
-                          child: mainContent,
                         ),
-                ],
+                      ],
+                    ),
+                    isCreate
+                        ? const CreateTeamForm()
+                        : SizedBox(
+                            height: height - 100 < 550 ? height - 100 : 550,
+                            child: mainContent,
+                          ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

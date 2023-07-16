@@ -130,6 +130,15 @@ class _MembersScreenState extends State<MembersScreen> {
                                         teamRole = null;
                                       });
                                       getAllMems();
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            teamController.errMsg,
+                                            style: const TextStyle(color: Colors.red),
+                                          ),
+                                        ),
+                                      );
                                     }
                                   });
                                 },

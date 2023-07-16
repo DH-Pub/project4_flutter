@@ -38,6 +38,7 @@ class UserController {
       errMsg = "Password should contain 1 upper, 1 lower, 1 digit, and atleast 8 characters.";
       return null;
     }
+    User? result;
     errMsg = '';
     final userDetail = json.encode({
       "email": emailController.text,
@@ -48,11 +49,13 @@ class UserController {
     final formData = FormData.fromMap({
       'user': MultipartFile.fromString(userDetail, contentType: MediaType.parse('application/json')),
     });
-    User? result;
     await dio
         .post("${API_CONSTANTS.user}/signup", data: formData)
         .then((value) => result = User.fromJson(value.data))
-        .catchError((err) => errMsg = err.response.data);
+        .catchError((err) {
+      errMsg = err.response.data;
+      return User.noArgs();
+    });
     return result;
   }
 
@@ -61,11 +64,19 @@ class UserController {
     await userApi.api
         .get("${API_CONSTANTS.user}/account")
         .then((value) => result = User.fromJson(value.data))
-        .catchError((err) => errMsg = err?.response?.data);
+        .catchError((err) {
+      errMsg = err.response.data;
+      return User.noArgs();
+    });
     return result;
   }
 
   Future<User?> updateAccount() async {
+    User? result;
+    if (usernameController.text.trim().isEmpty) {
+      errMsg = 'username cannot be empty';
+      return null;
+    }
     errMsg = '';
     final userDetail = json.encode({
       "username": usernameController.text,
@@ -74,11 +85,13 @@ class UserController {
     final formData = FormData.fromMap({
       'user': MultipartFile.fromString(userDetail, contentType: MediaType.parse('application/json')),
     });
-    User? result;
     await userApi.api
         .put("${API_CONSTANTS.user}/user/update", data: formData)
         .then((value) => result = User.fromJson(value.data))
-        .catchError((e) => errMsg = e.response.data);
+        .catchError((e) {
+      errMsg = e.response.data;
+      return User.noArgs();
+    });
     return result;
   }
 }

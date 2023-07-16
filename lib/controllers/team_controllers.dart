@@ -48,7 +48,10 @@ class TeamController {
         UserTeam team = UserTeam.fromJson(t);
         teams!.add(team);
       }
-    }).catchError((err) => errMsg = err.reponse.data);
+    }).catchError((err) {
+      errMsg = err.response.data;
+      return null;
+    });
     return teams;
   }
 
@@ -69,7 +72,10 @@ class TeamController {
         json.encode(team!.toJson()),
       );
       await getCurrentMember();
-    }).catchError((err) => errMsg = err.response.data);
+    }).catchError((err) {
+      errMsg = err.response.data;
+      return null;
+    });
     return team;
   }
 
@@ -91,16 +97,19 @@ class TeamController {
         json.encode(team!.toJson()),
       );
       await getCurrentMember();
-    }).catchError((err) => errMsg = err.response.data);
+    }).catchError((err) {
+      errMsg = err.response.data;
+      return null;
+    });
     return team;
   }
 
   Future<bool?> deleteTeam(id) async {
     bool? del;
-    await teamApi.api
-        .delete("${API_CONSTANTS.team}/delete/$id")
-        .then((value) => del = value.data)
-        .catchError((e) => errMsg = e.response.data);
+    await teamApi.api.delete("${API_CONSTANTS.team}/delete/$id").then((value) => del = value.data).catchError((e) {
+      errMsg = e.response.data;
+      return null;
+    });
     return del;
   }
 
@@ -113,7 +122,10 @@ class TeamController {
         StorageKey.currentMember,
         json.encode(currentMember!.toJson()),
       );
-    }).catchError((e) => errMsg = e.response.data);
+    }).catchError((e) {
+      errMsg = e.response.data;
+      return null;
+    });
     return currentMember;
   }
 
@@ -127,7 +139,10 @@ class TeamController {
         TeamMemberDetail member = TeamMemberDetail.fromJson(m);
         members!.add(member);
       }
-    }).catchError((e) => errMsg = e.response.data);
+    }).catchError((e) {
+      errMsg = e.response.data;
+      return null;
+    });
     return members;
   }
 
@@ -143,7 +158,10 @@ class TeamController {
           "role": teamRole,
         })
         .then((value) => member = TeamMember.fromJson(value.data))
-        .catchError((e) => errMsg = e.response.data);
+        .catchError((e) {
+          errMsg = e.response.data;
+          return TeamMember.noArgs();
+        });
     return member;
   }
 
@@ -152,7 +170,10 @@ class TeamController {
     await teamApi.api
         .delete("${API_CONSTANTS.team}/remove-member/$id")
         .then((value) => res = value.data)
-        .catchError((e) => e.response.data);
+        .catchError((e) {
+      errMsg = e.response.data;
+      return null;
+    });
     return res;
   }
 }

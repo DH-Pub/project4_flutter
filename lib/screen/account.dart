@@ -41,33 +41,35 @@ class _AccountScreenState extends State<AccountScreen> {
         ),
         drawer: const MenuDrawer(),
         bottomNavigationBar: const MenuBottom(),
-        body: Container(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              TextFormField(
-                enabled: false,
-                controller: userController.emailController,
-                decoration: const InputDecoration(
-                  labelText: "Email address",
+        body: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                TextFormField(
+                  enabled: false,
+                  controller: userController.emailController,
+                  decoration: const InputDecoration(
+                    labelText: "Email address",
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: userController.usernameController,
-                decoration: const InputDecoration(
-                  labelText: "Username",
+                const SizedBox(height: 20),
+                TextFormField(
+                  controller: userController.usernameController,
+                  decoration: const InputDecoration(
+                    labelText: "Username",
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                maxLines: null,
-                controller: userController.bioController,
-                decoration: const InputDecoration(
-                  labelText: "About yourself",
+                const SizedBox(height: 20),
+                TextFormField(
+                  maxLines: null,
+                  controller: userController.bioController,
+                  decoration: const InputDecoration(
+                    labelText: "About yourself",
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         floatingActionButton: FloatingActionButton(

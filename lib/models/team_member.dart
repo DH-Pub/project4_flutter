@@ -7,6 +7,8 @@ class TeamMember {
   String addedAt = '';
 
   TeamMember(this.id, this.userId, this.addedBy, this.teamId, this.role, this.addedAt);
+  TeamMember.noArgs();
+
   TeamMember.fromJson(Map<String, dynamic> teamMember) {
     id = teamMember["id"] ?? 0;
     userId = teamMember["userId"] ?? '';

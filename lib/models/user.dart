@@ -7,6 +7,7 @@ class User {
   String createdAt = '';
 
   User(this.id, this.email, this.username, this.bio, this.pic, this.createdAt);
+  User.noArgs();
   User.fromJson(Map<String, dynamic> user) {
     id = user["id"] ?? '';
     email = user["email"] ?? '';
