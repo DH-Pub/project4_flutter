@@ -9,7 +9,7 @@ import 'package:proj4_flutter/services/api.dart';
 
 class UserController {
   Dio dio = Dio();
-  Api user = Api();
+  Api userApi = Api();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
@@ -54,6 +54,15 @@ class UserController {
     }).catchError((err) {
       errMsg = err.response.data;
     });
+    return result;
+  }
+
+  Future<User?> getAccount() async {
+    User? result;
+    await userApi.api
+        .get("${API_CONSTANTS.user}/account")
+        .then((value) => result = value.data)
+        .catchError((err) => errMsg = err.response.data);
     return result;
   }
 }

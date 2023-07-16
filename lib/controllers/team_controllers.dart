@@ -9,7 +9,7 @@ import 'package:proj4_flutter/services/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TeamController {
-  Api team = Api();
+  Api teamApi = Api();
   late SharedPreferences prefs;
   TextEditingController teamNameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -40,22 +40,16 @@ class TeamController {
   }
 
   Future<List<UserTeam>?> getUserTeams() async {
-    try {
-      var res = await team.api.get("${API_CONSTANTS.team}/user");
-      if (res.statusCode == 200) {
-        List<dynamic> data = res.data;
-        List<UserTeam> teams = [];
-        for (Map<String, dynamic> t in data) {
-          UserTeam team = UserTeam.fromJson(t);
-          teams.add(team);
-        }
-        return teams;
-      } else {
-        return null;
+    List<UserTeam>? teams;
+    await teamApi.api.get("${API_CONSTANTS.team}/user").then((value) {
+      List<dynamic> data = value.data;
+      teams = [];
+      for (Map<String, dynamic> t in data) {
+        UserTeam team = UserTeam.fromJson(t);
+        teams!.add(team);
       }
-    } catch (e) {
-      return null;
-    }
+    }).catchError((err) => errMsg = err.reponse.data);
+    return teams;
   }
 
   Future<Team?> createTeam() async {
@@ -63,27 +57,20 @@ class TeamController {
       errMsg = "Team name cannot be empty";
       return null;
     }
-    try {
-      var res = await team.api.post("${API_CONSTANTS.team}/create", data: {
-        "teamName": teamNameController.text,
-        "description": descriptionController.text,
-      });
-      if (res.statusCode == 200) {
-        Team team = Team.fromJson(res.data);
-        prefs = await SharedPreferences.getInstance();
-        prefs.setString(
-          StorageKey.team,
-          json.encode(team.toJson()),
-        );
-        await getCurrentMember();
-        return team;
-      } else {
-        return null;
-      }
-    } catch (e) {
-      errMsg = "Error";
-      return null;
-    }
+    Team? team;
+    await teamApi.api.post("${API_CONSTANTS.team}/create", data: {
+      "teamName": teamNameController.text,
+      "description": descriptionController.text,
+    }).then((value) async {
+      team = Team.fromJson(value.data);
+      prefs = await SharedPreferences.getInstance();
+      prefs.setString(
+        StorageKey.team,
+        json.encode(team!.toJson()),
+      );
+      await getCurrentMember();
+    }).catchError((err) => errMsg = err.response.data);
+    return team;
   }
 
   Future<Team?> updateTeam(id) async {
@@ -91,123 +78,81 @@ class TeamController {
       errMsg = "Team name cannot be empty";
       return null;
     }
-    try {
-      var res = await team.api.put("${API_CONSTANTS.team}/update", data: {
-        "id": id,
-        "teamName": teamNameController.text,
-        "description": descriptionController.text,
-      });
-      if (res.statusCode == 200) {
-        Team team = Team.fromJson(res.data);
-        prefs = await SharedPreferences.getInstance();
-        prefs.setString(
-          StorageKey.team,
-          json.encode(team.toJson()),
-        );
-        await getCurrentMember();
-        return team;
-      } else {
-        errMsg = "Error";
-        return null;
-      }
-    } catch (e) {
-      errMsg = "Error";
-      return null;
-    }
+    Team? team;
+    await teamApi.api.put("${API_CONSTANTS.team}/update", data: {
+      "id": id,
+      "teamName": teamNameController.text,
+      "description": descriptionController.text,
+    }).then((value) async {
+      team = Team.fromJson(value.data);
+      prefs = await SharedPreferences.getInstance();
+      prefs.setString(
+        StorageKey.team,
+        json.encode(team!.toJson()),
+      );
+      await getCurrentMember();
+    }).catchError((err) => errMsg = err.response.data);
+    return team;
   }
 
   Future<bool?> deleteTeam(id) async {
-    try {
-      var res = await team.api.delete("${API_CONSTANTS.team}/delete/$id");
-      if (res.statusCode == 200) {
-        return res.data;
-      } else {
-        errMsg = "Error";
-        return null;
-      }
-    } catch (e) {
-      errMsg = "Error";
-      return null;
-    }
+    bool? del;
+    await teamApi.api
+        .delete("${API_CONSTANTS.team}/delete/$id")
+        .then((value) => del = value.data)
+        .catchError((e) => errMsg = e.response.data);
+    return del;
   }
 
   Future<TeamMemberDetail?> getCurrentMember() async {
-    try {
-      Team currentTeam = Team.fromJson(json.decode(prefs.getString(StorageKey.team) ?? ''));
-      var res = await team.api.get("${API_CONSTANTS.team}/${currentTeam.id}/current-member");
-      if (res.statusCode == 200) {
-        TeamMemberDetail currentMember = TeamMemberDetail.fromJson(res.data);
-        prefs.setString(
-          StorageKey.currentMember,
-          json.encode(currentMember.toJson()),
-        );
-        return currentMember;
-      } else {
-        return null;
-      }
-    } catch (e) {
-      errMsg = "Error";
-      return null;
-    }
+    TeamMemberDetail? currentMember;
+    Team currentTeam = Team.fromJson(json.decode(prefs.getString(StorageKey.team) ?? ''));
+    await teamApi.api.get("${API_CONSTANTS.team}/${currentTeam.id}/current-member").then((value) {
+      currentMember = currentMember = TeamMemberDetail.fromJson(value.data);
+      prefs.setString(
+        StorageKey.currentMember,
+        json.encode(currentMember!.toJson()),
+      );
+    }).catchError((e) => errMsg = e.response.data);
+    return currentMember;
   }
 
   Future<List<TeamMemberDetail>?> getAllMembersDetails() async {
-    try {
-      Team currentTeam = Team.fromJson(json.decode(prefs.getString(StorageKey.team) ?? ''));
-      var res = await team.api.get("${API_CONSTANTS.team}/${currentTeam.id}/all-members-details");
-      if (res.statusCode == 200) {
-        List<dynamic> data = res.data;
-        List<TeamMemberDetail> members = [];
-        for (Map<String, dynamic> m in data) {
-          TeamMemberDetail member = TeamMemberDetail.fromJson(m);
-          members.add(member);
-        }
-        return members;
-      } else {
-        errMsg = "Error";
-        return null;
+    List<TeamMemberDetail>? members;
+    Team currentTeam = Team.fromJson(json.decode(prefs.getString(StorageKey.team) ?? ''));
+    await teamApi.api.get("${API_CONSTANTS.team}/${currentTeam.id}/all-members-details").then((value) {
+      List<dynamic> data = value.data;
+      members = [];
+      for (Map<String, dynamic> m in data) {
+        TeamMemberDetail member = TeamMemberDetail.fromJson(m);
+        members!.add(member);
       }
-    } catch (e) {
-      errMsg = "Error";
-      return null;
-    }
+    }).catchError((e) => errMsg = e.response.data);
+    return members;
   }
 
   Future<TeamMember?> addMember(String email, String teamRole) async {
-    try {
-      String teamId;
-      await initPrefs();
-      teamId = getTeamInPrefs().id;
-      var res = await team.api.post("${API_CONSTANTS.team}/add-member", data: {
-        "email": email,
-        "teamId": teamId,
-        "role": teamRole,
-      });
-      if (res.statusCode == 200) {
-        TeamMember member = TeamMember.fromJson(res.data);
-        return member;
-      } else {
-        errMsg = "Error";
-        return null;
-      }
-    } catch (e) {
-      errMsg = "Error";
-      return null;
-    }
+    TeamMember? member;
+    String teamId;
+    await initPrefs();
+    teamId = getTeamInPrefs().id;
+    await teamApi.api
+        .post("${API_CONSTANTS.team}/add-member", data: {
+          "email": email,
+          "teamId": teamId,
+          "role": teamRole,
+        })
+        .then((value) => member = TeamMember.fromJson(value.data))
+        .catchError((e) => errMsg = e.response.data);
+    return member;
   }
 
   Future<bool?> removeMember(id) async {
-    try {
-      var res = await team.api.delete("${API_CONSTANTS.team}/remove-member/$id");
-      if (res.statusCode == 200) {
-        return res.data;
-      } else {
-        errMsg = "Error";
-        return null;
-      }
-    } catch (e) {
-      errMsg = "Error";
-      return null;
-    }
+    bool? res;
+    await teamApi.api
+        .delete("${API_CONSTANTS.team}/remove-member/$id")
+        .then((value) => res = value.data)
+        .catchError((e) => e.response.data);
+    return res;
   }
 }
