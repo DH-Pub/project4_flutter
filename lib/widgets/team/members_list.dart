@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proj4_flutter/constants/api_const.dart';
+import 'package:proj4_flutter/constants/team_member_role.dart';
 import 'package:proj4_flutter/models/team_member.dart';
 
 class MembersList extends StatelessWidget {
@@ -44,25 +45,31 @@ class MembersList extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 20),
-              Column(
-                children: [
-                  Text(
-                    mem.username,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  Text(mem.email),
-                  Text(mem.teamMemberRole),
-                ],
-              ),
-              const Spacer(),
-              IconButton(
-                onPressed: () {
-                  showRemoveDialog(context, mem);
-                },
-                icon: const Icon(
-                  Icons.remove,
-                  color: Colors.red,
+              Expanded(
+                child: Column(
+                  children: [
+                    Text(
+                      mem.username,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    Text(mem.email),
+                    Text(mem.teamMemberRole),
+                  ],
                 ),
+              ),
+              SizedBox(
+                width: 50,
+                child: members[index].teamMemberRole == TeamMemberRole.CREATOR.name
+                    ? const Text('')
+                    : IconButton(
+                        onPressed: () {
+                          showRemoveDialog(context, mem);
+                        },
+                        icon: const Icon(
+                          Icons.remove,
+                          color: Colors.red,
+                        ),
+                      ),
               ),
             ],
           ),

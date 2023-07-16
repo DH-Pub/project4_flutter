@@ -61,8 +61,8 @@ class UserController {
     User? result;
     await userApi.api
         .get("${API_CONSTANTS.user}/account")
-        .then((value) => result = value.data)
-        .catchError((err) => errMsg = err.response.data);
+        .then((value) => result = User.fromJson(value.data))
+        .catchError((err) => errMsg = err?.response?.data);
     return result;
   }
 }

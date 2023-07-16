@@ -13,39 +13,34 @@ class AuthService {
 
   AuthService(this.prefs);
 
-  Dio api = Dio();
+  Dio dio = Dio();
   String errorMessage = "";
 
   Future<bool> loginUser(email, password) async {
+    errorMessage = '';
     const url = '${API_CONSTANTS.baseUrl}/auth/login';
     if (email == '' || password == '') {
       errorMessage = "Email and password cannot be empty";
       _onAuthStateChange.add(false);
       return false;
     }
-    try {
-      var response = await api.post(url, data: {
-        "username": email,
-        "password": password,
-      });
-      if (response.statusCode == 200) {
-        String token = response.data["token"];
-        String refreshToken = response.data["refreshToken"];
-        prefs.setString(StorageKey.token, token);
-        prefs.setString(StorageKey.refreshToken, refreshToken);
+    bool res = false;
+    await dio.post(url, data: {
+      "username": email,
+      "password": password,
+    }).then((value) {
+      String token = value.data["token"];
+      String refreshToken = value.data["refreshToken"];
+      prefs.setString(StorageKey.token, token);
+      prefs.setString(StorageKey.refreshToken, refreshToken);
 
-        _onAuthStateChange.add(true);
-        return true;
-      } else {
-        errorMessage = "Invalid email or password";
-        _onAuthStateChange.add(false);
-        return false;
-      }
-    } catch (e) {
-      errorMessage = "Invalid email or password";
+      _onAuthStateChange.add(true);
+      res = true;
+    }).catchError((e) {
+      errorMessage = e.response.data;
       _onAuthStateChange.add(false);
-      return false;
-    }
+    });
+    return res;
   }
 
   void logOut() {
