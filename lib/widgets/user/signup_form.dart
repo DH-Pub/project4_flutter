@@ -11,13 +11,13 @@ class SignupForm extends StatefulWidget {
 
 class _SignupFormState extends State<SignupForm> {
   UserController userController = UserController();
-  late bool passwordVisible;
-  late bool confirmVisible;
+  late bool passwordObscure;
+  late bool confirmObscure;
 
   @override
   void initState() {
-    passwordVisible = true;
-    confirmVisible = true;
+    passwordObscure = true;
+    confirmObscure = true;
     setState(() {});
     super.initState();
   }
@@ -41,33 +41,33 @@ class _SignupFormState extends State<SignupForm> {
         ),
         const SizedBox(height: 20),
         TextFormField(
-          obscureText: passwordVisible,
+          obscureText: passwordObscure,
           controller: userController.passwordController,
           decoration: InputDecoration(
             hintText: "Password",
             suffixIcon: IconButton(
               onPressed: () {
                 setState(() {
-                  passwordVisible = !passwordVisible;
+                  passwordObscure = !passwordObscure;
                 });
               },
-              icon: Icon(passwordVisible ? Icons.visibility : Icons.visibility_off),
+              icon: Icon(passwordObscure ? Icons.visibility : Icons.visibility_off),
             ),
           ),
         ),
         const SizedBox(height: 20),
         TextFormField(
-          obscureText: confirmVisible,
+          obscureText: confirmObscure,
           controller: userController.confirmPasswordController,
           decoration: InputDecoration(
-            hintText: "Password",
+            hintText: "Confirm Password",
             suffixIcon: IconButton(
               onPressed: () {
                 setState(() {
-                  confirmVisible = !confirmVisible;
+                  confirmObscure = !confirmObscure;
                 });
               },
-              icon: Icon(confirmVisible ? Icons.visibility : Icons.visibility_off),
+              icon: Icon(confirmObscure ? Icons.visibility : Icons.visibility_off),
             ),
           ),
         ),

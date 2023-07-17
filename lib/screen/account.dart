@@ -4,6 +4,7 @@ import 'package:proj4_flutter/controllers/user_controllers.dart';
 import 'package:proj4_flutter/models/user.dart';
 import 'package:proj4_flutter/shared/menu_bottom.dart';
 import 'package:proj4_flutter/shared/menu_drawer.dart';
+import 'package:proj4_flutter/widgets/user/change_password_alert.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -99,7 +100,28 @@ class _AccountScreenState extends State<AccountScreen> {
             color: Colors.white,
           ),
         ),
+        persistentFooterButtons: [
+          Padding(
+            padding: const EdgeInsets.only(top: 40),
+            child: TextButton(
+              style: TextButton.styleFrom(foregroundColor: Colors.white, backgroundColor: Colors.red),
+              onPressed: () {
+                _showChangePasswordDialog(context);
+              },
+              child: const Text("Change Password"),
+            ),
+          ),
+        ],
       ),
+    );
+  }
+
+  Future<void> _showChangePasswordDialog(context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const ChangePasswordAlert();
+      },
     );
   }
 }

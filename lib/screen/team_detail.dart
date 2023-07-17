@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proj4_flutter/constants/colors_const.dart';
 import 'package:proj4_flutter/constants/team_member_role.dart';
@@ -130,58 +129,61 @@ class _TeamDetailsStat extends State<TeamDetail> {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Center(
-            child: Column(
-              children: [
-                Text.rich(
-                  TextSpan(
-                    text: "Please enter ",
-                    style: const TextStyle(fontSize: 16),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: confirm,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          backgroundColor: Color.fromARGB(255, 190, 190, 190),
+        return GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: AlertDialog(
+            title: Center(
+              child: Column(
+                children: [
+                  Text.rich(
+                    TextSpan(
+                      text: "Please enter ",
+                      style: const TextStyle(fontSize: 16),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: confirm,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            backgroundColor: Color.fromARGB(255, 190, 190, 190),
+                          ),
                         ),
-                      ),
-                      const TextSpan(text: " to delete the team"),
-                    ],
+                        const TextSpan(text: " to delete the team"),
+                      ],
+                    ),
                   ),
-                ),
-                TextFormField(
-                  enabled: isCreator,
-                  controller: confirmTxt,
-                ),
-              ],
-            ),
-          ),
-          contentPadding: const EdgeInsets.all(8),
-          actions: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              onPressed: () {
-                if (confirm == confirmTxt.text) {
-                  teamController.deleteTeam(team.id).then((value) {
-                    // FocusManager.instance.primaryFocus?.unfocus();
-                    if (value == true) {
-                      Navigator.pop(context);
-                      context.go(APP_PAGE.userTeams.toPath);
-                    }
-                  });
-                }
-              },
-              child: const Text(
-                "Remove",
-                style: TextStyle(color: Colors.white),
+                  TextFormField(
+                    enabled: isCreator,
+                    controller: confirmTxt,
+                  ),
+                ],
               ),
             ),
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Cancel"),
-            ),
-          ],
+            contentPadding: const EdgeInsets.all(8),
+            actions: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                onPressed: () {
+                  if (confirm == confirmTxt.text) {
+                    teamController.deleteTeam(team.id).then((value) {
+                      // FocusManager.instance.primaryFocus?.unfocus();
+                      if (value == true) {
+                        Navigator.pop(context);
+                        context.go(APP_PAGE.userTeams.toPath);
+                      }
+                    });
+                  }
+                },
+                child: const Text(
+                  "Remove",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("Cancel"),
+              ),
+            ],
+          ),
         );
       },
     );

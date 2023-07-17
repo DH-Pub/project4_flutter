@@ -4,9 +4,16 @@ import 'package:proj4_flutter/constants/team_member_role.dart';
 import 'package:proj4_flutter/models/team_member.dart';
 
 class MembersList extends StatelessWidget {
+  final bool hasAuth;
+  final TeamMemberDetail currentMember;
   final List<TeamMemberDetail> members;
   final Function showRemoveDialog;
-  const MembersList({super.key, required this.members, required this.showRemoveDialog});
+  const MembersList(
+      {super.key,
+      required this.members,
+      required this.showRemoveDialog,
+      required this.hasAuth,
+      required this.currentMember});
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +25,7 @@ class MembersList extends StatelessWidget {
         itemCount: members.length,
         itemBuilder: (context, index) {
           TeamMemberDetail mem = members[index];
+          bool isCreator = members[index].teamMemberRole != TeamMemberRole.CREATOR.name;
           return Container(
             margin: const EdgeInsets.symmetric(vertical: 5.0),
             child: Row(
@@ -60,17 +68,18 @@ class MembersList extends StatelessWidget {
                 ),
                 SizedBox(
                   width: 50,
-                  child: members[index].teamMemberRole == TeamMemberRole.CREATOR.name
-                      ? const Text('')
-                      : IconButton(
-                          onPressed: () {
-                            showRemoveDialog(context, mem);
-                          },
-                          icon: const Icon(
-                            Icons.remove,
-                            color: Colors.red,
-                          ),
-                        ),
+                  child:
+                      (isCreator && hasAuth) || (isCreator && currentMember.teamMemberId == members[index].teamMemberId)
+                          ? IconButton(
+                              onPressed: () {
+                                showRemoveDialog(context, mem);
+                              },
+                              icon: const Icon(
+                                Icons.remove,
+                                color: Colors.red,
+                              ),
+                            )
+                          : const SizedBox(),
                 ),
               ],
             ),

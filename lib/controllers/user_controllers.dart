@@ -18,6 +18,23 @@ class UserController {
   TextEditingController bioController = TextEditingController();
   String errMsg = "";
 
+  bool checkPassword() {
+    if (passwordController.text.isEmpty || confirmPasswordController.text.isEmpty) {
+      errMsg = "Password and confirm password cannot be empty.";
+      return false;
+    }
+    if (passwordController.text != confirmPasswordController.text) {
+      errMsg = "Password and confirm password does not match.";
+      return false;
+    }
+    RegExp regex = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$');
+    if (!regex.hasMatch(passwordController.text)) {
+      errMsg = "Password should contain 1 upper, 1 lower, 1 digit, and atleast 8 characters.";
+      return false;
+    }
+    return true;
+  }
+
   Future<User?> signup() async {
     if (emailController.text.isEmpty) {
       errMsg = "Email cannot be empty.";
@@ -25,17 +42,7 @@ class UserController {
     } else if (usernameController.text.isEmpty) {
       errMsg = "Username cannot be empty.";
       return null;
-    } else if (passwordController.text.isEmpty || confirmPasswordController.text.isEmpty) {
-      errMsg = "Password and confirm password cannot be empty.";
-      return null;
-    }
-    if (passwordController.text != confirmPasswordController.text) {
-      errMsg = "Password and confirm password does not match.";
-      return null;
-    }
-    RegExp regex = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$');
-    if (!regex.hasMatch(passwordController.text)) {
-      errMsg = "Password should contain 1 upper, 1 lower, 1 digit, and atleast 8 characters.";
+    } else if (!checkPassword()) {
       return null;
     }
     User? result;
@@ -92,6 +99,28 @@ class UserController {
       errMsg = e.response.data;
       return User.noArgs();
     });
+    return result;
+  }
+
+  Future<bool?> changePassword(String oldPassword) async {
+    bool? result;
+    errMsg = '';
+    if (oldPassword.trim().isEmpty) {
+      errMsg = "Please enter your current password";
+      return null;
+    } else if (!checkPassword()) {
+      return null;
+    }
+    await userApi.api
+        .put("${API_CONSTANTS.user}/user/change-password", data: {
+          "oldPassword": oldPassword,
+          "newPassword": passwordController.text,
+        })
+        .then((value) => result = value.data)
+        .catchError((e) {
+          errMsg = e.response.data;
+          return User.noArgs();
+        });
     return result;
   }
 }

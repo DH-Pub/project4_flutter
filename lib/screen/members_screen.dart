@@ -5,14 +5,9 @@ import 'package:proj4_flutter/models/team_member.dart';
 import 'package:proj4_flutter/routes/route_utils.dart';
 import 'package:proj4_flutter/shared/menu_bottom.dart';
 import 'package:proj4_flutter/shared/menu_drawer.dart';
+import 'package:proj4_flutter/widgets/team/member_add.dart';
 import 'package:proj4_flutter/widgets/team/members_list.dart';
 import 'package:proj4_flutter/widgets/team/remove_member_alert.dart';
-
-List<String> list = <String>[
-  TeamMemberRole.ADMINISTRATOR.name,
-  TeamMemberRole.MEMBER.name,
-  TeamMemberRole.GUEST.name,
-];
 
 class MembersScreen extends StatefulWidget {
   const MembersScreen({super.key});
@@ -25,8 +20,7 @@ class _MembersScreenState extends State<MembersScreen> {
   TeamController teamController = TeamController();
   TeamMemberDetail currentMember = TeamMemberDetail(0, '', '', '', '', '', '', '', '');
   bool isAdmin = false;
-  TextEditingController emailController = TextEditingController();
-  String? teamRole;
+  bool hasAuth = false;
 
   Widget mainContent = const Column(
     mainAxisAlignment: MainAxisAlignment.center,
@@ -55,7 +49,12 @@ class _MembersScreenState extends State<MembersScreen> {
           style: TextStyle(color: Colors.red),
         );
       } else {
-        mainContent = MembersList(members: value, showRemoveDialog: _showRemoveDialog);
+        mainContent = MembersList(
+          members: value,
+          showRemoveDialog: _showRemoveDialog,
+          hasAuth: hasAuth,
+          currentMember: currentMember,
+        );
       }
       setState(() {});
     });
@@ -66,6 +65,8 @@ class _MembersScreenState extends State<MembersScreen> {
     teamController.initPrefs().then((_) {
       currentMember = teamController.getCurrentMemberInPrefs();
       isAdmin = currentMember.teamMemberRole == TeamMemberRole.CREATOR.name ||
+          currentMember.teamMemberRole == TeamMemberRole.ADMINISTRATOR.name;
+      hasAuth = currentMember.teamMemberRole == TeamMemberRole.CREATOR.name ||
           currentMember.teamMemberRole == TeamMemberRole.ADMINISTRATOR.name;
       getAllMems();
     });
@@ -88,80 +89,7 @@ class _MembersScreenState extends State<MembersScreen> {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
-              isAdmin
-                  ? Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            children: [
-                              TextFormField(
-                                controller: emailController,
-                                decoration: const InputDecoration(
-                                  labelText: "Enter email",
-                                ),
-                              ),
-                              DropdownButton(
-                                hint: const Text("Choose a role"),
-                                value: teamRole,
-                                items: list.map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    teamRole = value!;
-                                  });
-                                },
-                              )
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        ElevatedButton(
-                          onPressed: teamRole == null || emailController.text == ''
-                              ? null
-                              : () {
-                                  teamController.addMember(emailController.text, teamRole!).then((value) {
-                                    if (value != null) {
-                                      setState(() {
-                                        emailController.text = '';
-                                        teamRole = null;
-                                      });
-                                      getAllMems();
-                                    } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            teamController.errMsg,
-                                            style: const TextStyle(color: Colors.red),
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                  });
-                                },
-                          child: const Row(
-                            children: [
-                              Icon(
-                                Icons.add,
-                                color: Colors.white,
-                              ),
-                              SizedBox(width: 5),
-                              Text(
-                                "Add",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
-                  : const SizedBox(height: 20),
+              isAdmin ? MemberAdd(getAllMems: getAllMems) : const SizedBox(),
               const SizedBox(height: 20),
               Expanded(
                 child: mainContent,

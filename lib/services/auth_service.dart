@@ -16,7 +16,7 @@ class AuthService {
   Dio dio = Dio();
   String errorMessage = "";
 
-  Future<bool> loginUser(email, password) async {
+  Future<bool?> loginUser(email, password) async {
     errorMessage = '';
     const url = '${API_CONSTANTS.baseUrl}/auth/login';
     if (email == '' || password == '') {
@@ -24,7 +24,7 @@ class AuthService {
       _onAuthStateChange.add(false);
       return false;
     }
-    bool res = false;
+    bool? res;
     await dio.post(url, data: {
       "username": email,
       "password": password,
@@ -37,8 +37,9 @@ class AuthService {
       _onAuthStateChange.add(true);
       res = true;
     }).catchError((e) {
-      errorMessage = e.response.data;
+      errorMessage = "Wrong email or password";
       _onAuthStateChange.add(false);
+      return;
     });
     return res;
   }
