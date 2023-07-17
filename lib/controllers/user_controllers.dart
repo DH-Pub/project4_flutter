@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:proj4_flutter/constants/api_const.dart';
 import 'package:proj4_flutter/models/user.dart';
 import 'package:proj4_flutter/services/api.dart';
@@ -78,7 +79,7 @@ class UserController {
     return result;
   }
 
-  Future<User?> updateAccount() async {
+  Future<User?> updateAccount([XFile? image]) async {
     User? result;
     if (usernameController.text.trim().isEmpty) {
       errMsg = 'username cannot be empty';
@@ -89,8 +90,10 @@ class UserController {
       "username": usernameController.text,
       "bio": bioController.text,
     });
+    String fileName = image != null ? image.path.split('/').last : '';
     final formData = FormData.fromMap({
       'user': MultipartFile.fromString(userDetail, contentType: MediaType.parse('application/json')),
+      'image': image != null ? await MultipartFile.fromFile(image.path, filename: fileName) : null,
     });
     await userApi.api
         .put("${API_CONSTANTS.user}/user/update", data: formData)

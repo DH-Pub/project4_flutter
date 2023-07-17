@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:proj4_flutter/constants/colors_const.dart';
 import 'package:proj4_flutter/controllers/user_controllers.dart';
 import 'package:proj4_flutter/models/user.dart';
 import 'package:proj4_flutter/shared/menu_bottom.dart';
 import 'package:proj4_flutter/shared/menu_drawer.dart';
 import 'package:proj4_flutter/widgets/user/change_password_alert.dart';
+import 'package:proj4_flutter/widgets/user/user_image.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -17,15 +19,23 @@ class _AccountScreenState extends State<AccountScreen> {
   UserController userController = UserController();
   User user = User('', '', '', '', '', '');
 
+  XFile? image;
+  final picker = ImagePicker();
+  Future<void> getImage(ImageSource media) async {
+    image = await picker.pickImage(source: media);
+    setState(() {});
+  }
+
   @override
   void initState() {
     userController.getAccount().then((value) {
       if (value != null) {
         user = value;
-        userController.emailController.text = value.email;
-        userController.usernameController.text = value.username;
-        userController.bioController.text = value.bio;
+        userController.emailController.text = user.email;
+        userController.usernameController.text = user.username;
+        userController.bioController.text = user.bio;
       }
+      setState(() {});
     });
     super.initState();
   }
@@ -47,6 +57,11 @@ class _AccountScreenState extends State<AccountScreen> {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
+                UserImage(
+                  user: user,
+                  getImage: getImage,
+                  image: image,
+                ),
                 TextFormField(
                   enabled: false,
                   controller: userController.emailController,
@@ -75,7 +90,7 @@ class _AccountScreenState extends State<AccountScreen> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            userController.updateAccount().then((value) {
+            userController.updateAccount(image).then((value) {
               if (value != null) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("Saved")),
