@@ -33,7 +33,7 @@ class _CreateTeamFormState extends State<CreateTeamForm> {
         ),
         const SizedBox(height: 20),
         Text(
-          teamCtrl.errMsg,
+          teamCtrl.errMsg ?? "",
           style: const TextStyle(color: Colors.red),
         ),
         ElevatedButton(

@@ -13,7 +13,7 @@ class TeamController {
   late SharedPreferences prefs;
   TextEditingController teamNameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  String errMsg = "";
+  String? errMsg = "";
 
   Future initPrefs() async {
     prefs = await SharedPreferences.getInstance();
@@ -124,7 +124,6 @@ class TeamController {
       );
     }).catchError((e) {
       errMsg = e.response.data;
-      return null;
     });
     return currentMember;
   }

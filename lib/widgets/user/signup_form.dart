@@ -81,7 +81,7 @@ class _SignupFormState extends State<SignupForm> {
         ),
         const SizedBox(height: 20),
         Text(
-          userController.errMsg,
+          userController.errMsg ?? "",
           style: const TextStyle(color: Colors.red),
         ),
         ElevatedButton(

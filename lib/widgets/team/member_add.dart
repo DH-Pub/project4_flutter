@@ -66,7 +66,7 @@ class _MemberAddState extends State<MemberAdd> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            teamController.errMsg,
+                            teamController.errMsg ?? "",
                             style: const TextStyle(color: Colors.red),
                           ),
                         ),

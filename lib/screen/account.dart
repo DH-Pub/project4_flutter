@@ -99,7 +99,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      userController.errMsg,
+                      userController.errMsg ?? "",
                       style: const TextStyle(color: Colors.red),
                     ),
                   ),

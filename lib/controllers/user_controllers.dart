@@ -17,7 +17,7 @@ class UserController {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController bioController = TextEditingController();
-  String errMsg = "";
+  String? errMsg = "";
 
   bool checkPassword() {
     if (passwordController.text.isEmpty || confirmPasswordController.text.isEmpty) {
