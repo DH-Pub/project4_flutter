@@ -19,6 +19,10 @@ class _HomeScreenState extends State<HomeScreen> {
   late Team team = Team('', '', '', '');
   late TeamController teamController = TeamController();
   late List<Task>? tasks = [];
+  late List<Task>? doingTasks = [];
+  late List<Task>? openTasks = [];
+  late List<Task>? resolvedTasks = [];
+  late List<Task>? closedTasks = [];
   late Task task = Task();
   late TaskController taskController = TaskController();
 
@@ -40,7 +44,17 @@ class _HomeScreenState extends State<HomeScreen> {
     //   setState(() {});
     // });
     getTasksByUser().then((_) {
-      print(tasks.toString());
+      for (var task in tasks!) {
+        if (task.status == "IN PROGRESS") {
+          doingTasks!.add(task);
+        } else if (task.status == "OPREN") {
+          openTasks!.add(task);
+        } else if (task.status == "RESOVED") {
+          resolvedTasks!.add(task);
+        } else {
+          closedTasks!.add(task);
+        }
+      }
     });
     super.initState();
   }
@@ -48,90 +62,110 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          foregroundColor: Colors.white,
-          title: Text(APP_PAGE.home.toTitle),
-        ),
-        drawer: const MenuDrawer(),
-        bottomNavigationBar: const MenuBottom(),
-        // body: Column(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: [
-        //     Text(team.teamName),
-        //   ],
-        // ),
-        body: SizedBox(
-          child: DataTable(
-            showCheckboxColumn: false,
-            columnSpacing: 20,
-            columns: const [
-              DataColumn(
-                  label: Text('Task',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 12))),
-              DataColumn(
-                  label: Text('Priority',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 12))),
-              DataColumn(
-                  label: Text('Category',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 12))),
-              DataColumn(
-                  label: Text('Due Date',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 12))),
-            ],
-            rows: List<DataRow>.generate(
-              tasks!.length,
-              (index) => DataRow(
-                selected: false,
-                onSelectChanged: (x) => {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TaskDetail(task: tasks![index]),
-                    ),
-                  )
-                },
-                cells: [
-                  DataCell(
-                    Container(
-                      width: 130, //SET width
-                      child: Text(
-                        "${tasks?[index].taskName}",
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ),
-                  DataCell(
-                    Container(
-                      width: 60, //SET width
-                      child: Text(
-                        "${tasks?[index].priority}",
-                      ),
-                    ),
-                  ),
-                  DataCell(
-                    Container(
-                      width: 35, //SET width
-                      child: Text(
-                        "${tasks?[index].category}",
-                      ),
-                    ),
-                  ),
-                  DataCell(
-                    Container(
-                      width: 100, //SET width
-                      child: Text(
-                        "${tasks?[index].dueDate}",
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+      appBar: AppBar(
+        foregroundColor: Colors.white,
+        title: Text(APP_PAGE.home.toTitle),
+      ),
+      drawer: const MenuDrawer(),
+      bottomNavigationBar: const MenuBottom(),
+      body: Column(
+        children: [
+          const Row(
+            children: [Text("IN PROGRESS")],
           ),
-        ));
+          Row(
+            children: [
+              SizedBox(
+                child: DataTable(
+                  showCheckboxColumn: false,
+                  columnSpacing: 15,
+                  columns: const [
+                    DataColumn(
+                        label: Text('Task',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 12))),
+                    DataColumn(
+                        label: Text('Priority',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 12))),
+                    DataColumn(
+                        label: Text('Category',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 12))),
+                    DataColumn(
+                        label: Text('Due Date',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 12))),
+                  ],
+                  rows: List<DataRow>.generate(
+                    doingTasks!.length,
+                    (index) => DataRow(
+                      selected: false,
+                      onSelectChanged: (x) => {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                TaskDetail(task: doingTasks![index]),
+                          ),
+                        )
+                      },
+                      cells: [
+                        DataCell(
+                          Container(
+                            width: 130, //SET width
+                            child: Text(
+                              "${doingTasks?[index].taskName}",
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                        DataCell(
+                          Container(
+                            width: 10, //SET width
+                            child: Icon(
+                              doingTasks?[index].priority == "HIGH"
+                                  ? Icons.arrow_upward
+                                  : doingTasks?[index].priority == "NORMAL"
+                                      ? Icons.arrow_forward
+                                      : doingTasks?[index].priority == "LOW"
+                                          ? Icons.arrow_downward
+                                          : null,
+                              color: doingTasks?[index].priority == "HIGH"
+                                  ? Colors.red
+                                  : doingTasks?[index].priority == "NORMAL"
+                                      ? Colors.blue
+                                      : doingTasks?[index].priority == "LOW"
+                                          ? Colors.green
+                                          : null,
+                            ),
+                          ),
+                        ),
+                        DataCell(
+                          Container(
+                            width: 35, //SET width
+                            child: Text(
+                              "${doingTasks?[index].category}",
+                            ),
+                          ),
+                        ),
+                        DataCell(
+                          Container(
+                            width: 80, //SET width
+                            child: Text(
+                              "${doingTasks?[index].dueDate}",
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
