@@ -16,4 +16,15 @@ class User {
     pic = user["pic"] ?? '';
     createdAt = user["createdAt"] ?? '';
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['email'] = this.email;
+    data['username'] = this.username;
+    data['bio'] = this.bio;
+    data['pic'] = this.pic;
+    data['createdAt'] = this.createdAt;
+    return data;
+  }
 }
