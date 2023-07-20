@@ -94,7 +94,7 @@ class _SignupFormState extends State<SignupForm> {
             });
           },
           child: const Text(
-            "Create Team",
+            "Sign up",
             style: TextStyle(color: Colors.white),
           ),
         ),

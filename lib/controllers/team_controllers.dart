@@ -56,7 +56,7 @@ class TeamController {
   }
 
   Future<Team?> createTeam() async {
-    if (teamNameController.text.isEmpty) {
+    if (teamNameController.text.trim().isEmpty) {
       errMsg = "Team name cannot be empty";
       return null;
     }
@@ -80,7 +80,7 @@ class TeamController {
   }
 
   Future<Team?> updateTeam(id) async {
-    if (teamNameController.text.isEmpty) {
+    if (teamNameController.text.trim().isEmpty) {
       errMsg = "Team name cannot be empty";
       return null;
     }
@@ -146,6 +146,10 @@ class TeamController {
   }
 
   Future<TeamMember?> addMember(String email, String teamRole) async {
+    if (email.trim().isEmpty) {
+      errMsg = "Please enter a valid email";
+      return null;
+    }
     TeamMember? member;
     String teamId;
     await initPrefs();

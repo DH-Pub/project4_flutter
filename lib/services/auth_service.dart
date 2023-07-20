@@ -16,10 +16,10 @@ class AuthService {
   Dio dio = Dio();
   String errorMessage = "";
 
-  Future<bool?> loginUser(email, password) async {
+  Future<bool?> loginUser(String email, String password) async {
     errorMessage = '';
     const url = '${API_CONSTANTS.baseUrl}/auth/login';
-    if (email == '' || password == '') {
+    if (email.trim().isEmpty || password.trim().isEmpty) {
       errorMessage = "Email and password cannot be empty";
       _onAuthStateChange.add(false);
       return false;

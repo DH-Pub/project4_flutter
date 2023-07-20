@@ -37,10 +37,15 @@ class UserController {
   }
 
   Future<User?> signup() async {
+    final bool emailValid =
+        RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(emailController.text);
     if (emailController.text.isEmpty) {
       errMsg = "Email cannot be empty.";
       return null;
-    } else if (usernameController.text.isEmpty) {
+    } else if (!emailValid) {
+      errMsg = "Email is not valid.";
+      return null;
+    } else if (usernameController.text.trim().isEmpty) {
       errMsg = "Username cannot be empty.";
       return null;
     } else if (!checkPassword()) {
