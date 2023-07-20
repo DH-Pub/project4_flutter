@@ -241,51 +241,51 @@ class _TaskDetailState extends State<TaskDetail> {
                     return null;
                   },
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Project project = Project();
-                      project.id = "1689772797132";
-                      Task taskUpdated = Task();
-                      taskUpdated.id = widget.task.id;
-                      taskUpdated.taskName = taskName.text;
-                      taskUpdated.description = description.text;
-                      taskUpdated.brief = brief.text;
-                      taskUpdated.priority = priority.text;
-                      taskUpdated.category = category.text;
-                      taskUpdated.status = status.text;
-                      taskUpdated.estimated = int.parse(estimated.text);
-                      taskUpdated.actualHours = int.parse(actual.text);
-                      taskUpdated.startDate = startDate.text;
-                      taskUpdated.endDate = endDate.text;
-                      taskUpdated.dueDate = dueDate.text;
-                      taskUpdated.user = widget.task.user;
-                      taskUpdated.parentTask = parentTask.text;
-                      taskUpdated.project = widget.task.project;
-                      TaskController taskController = TaskController();
-                      taskController
-                          .updateTask(taskUpdated.toJson())
-                          .then((response) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HomeScreen(),
-                          ),
-                        );
-                      }).catchError((err) {
-                        print(err);
-                      });
-                    },
-                    child: const Text(
-                      'Submit',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(vertical: 16),
+                //   child: ElevatedButton(
+                //     onPressed: () {
+                //       Project project = Project();
+                //       project.id = "1689772797132";
+                //       Task taskUpdated = Task();
+                //       taskUpdated.id = widget.task.id;
+                //       taskUpdated.taskName = taskName.text;
+                //       taskUpdated.description = description.text;
+                //       taskUpdated.brief = brief.text;
+                //       taskUpdated.priority = priority.text;
+                //       taskUpdated.category = category.text;
+                //       taskUpdated.status = status.text;
+                //       taskUpdated.estimated = int.parse(estimated.text);
+                //       taskUpdated.actualHours = int.parse(actual.text);
+                //       taskUpdated.startDate = startDate.text;
+                //       taskUpdated.endDate = endDate.text;
+                //       taskUpdated.dueDate = dueDate.text;
+                //       taskUpdated.user = widget.task.user;
+                //       taskUpdated.parentTask = parentTask.text;
+                //       taskUpdated.project = widget.task.project;
+                //       TaskController taskController = TaskController();
+                //       taskController
+                //           .updateTask(taskUpdated.toJson())
+                //           .then((response) {
+                //         Navigator.push(
+                //           context,
+                //           MaterialPageRoute(
+                //             builder: (context) => HomeScreen(),
+                //           ),
+                //         );
+                //       }).catchError((err) {
+                //         print(err);
+                //       });
+                //     },
+                //     child: const Text(
+                //       'Submit',
+                //       style: TextStyle(
+                //         color: Colors.white,
+                //         fontWeight: FontWeight.bold,
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
