@@ -54,4 +54,18 @@ class TaskController {
     });
     return tasks;
   }
+
+  Future<bool?> updateTask(taskUpdated) async {
+    // bool result = false;
+    await taskApi.api
+        .post("${API_CONSTANTS.task}/update", data: taskUpdated)
+        .then((response) {
+      print(response.toString());
+      return true;
+    }).catchError((err) {
+      print(err.toString());
+      return false;
+    });
+    return null;
+  }
 }
