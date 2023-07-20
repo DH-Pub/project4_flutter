@@ -11,6 +11,7 @@ enum APP_PAGE {
   members,
   account,
   projects,
+  taskDetail
 }
 
 extension AppPageExtension on APP_PAGE {
@@ -26,6 +27,7 @@ extension AppPageExtension on APP_PAGE {
     APP_PAGE.members: "/members",
     APP_PAGE.account: "/account",
     APP_PAGE.projects: "/projects",
+    APP_PAGE.taskDetail: "/taskDetail"
   };
   String get toPath {
     return pathMap[this] ?? '/';
@@ -43,6 +45,7 @@ extension AppPageExtension on APP_PAGE {
     APP_PAGE.members: "MEMBERS",
     APP_PAGE.account: "ACCOUNT",
     APP_PAGE.projects: "PROJECTS",
+    APP_PAGE.taskDetail: "TASK_DETAIL"
   };
   String get toName {
     return namePath[this] ?? '/';
@@ -60,6 +63,7 @@ extension AppPageExtension on APP_PAGE {
     APP_PAGE.members: "Members",
     APP_PAGE.account: "Account Settings",
     APP_PAGE.projects: "Projects",
+    APP_PAGE.taskDetail: "Task Detail",
   };
   String get toTitle {
     return titlePath[this] ?? '/';
