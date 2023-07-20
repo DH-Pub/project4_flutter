@@ -13,13 +13,14 @@ class Task {
   String? startDate;
   String? endDate;
   String? dueDate;
-  String? files;
+  List<String>? files;
   String? status;
   int? position;
   String? version;
   User? user;
   String? parentTask;
   Project? project;
+  String? statusUpdateAt;
 
   Task(
       {this.id,
@@ -39,7 +40,8 @@ class Task {
       this.version,
       this.user,
       this.parentTask,
-      this.project});
+      this.project,
+      this.statusUpdateAt});
   Task.noArgs();
   Task.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -61,6 +63,7 @@ class Task {
     parentTask = json['parentTask'];
     project =
         json['project'] != null ? new Project.fromJson(json['project']) : null;
+    statusUpdateAt = json['statusUpdateAt'];
   }
 
   Map<String, dynamic> toJson() {
@@ -87,6 +90,7 @@ class Task {
     if (this.project != null) {
       data['project'] = this.project!.toJson();
     }
+    data['statusUpdateAt'] = this.statusUpdateAt;
     return data;
   }
 }
