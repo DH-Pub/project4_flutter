@@ -155,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           cells: [
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 130, //SET width
                                 child: Text(
                                   "${doingTasks?[index].taskName}",
@@ -164,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 10, //SET width
                                 child: Icon(
                                   doingTasks?[index].priority == "HIGH"
@@ -185,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 35, //SET width
                                 child: Text(
                                   "${doingTasks?[index].category}",
@@ -193,10 +193,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 80, //SET width
                                 child: Text(
-                                  "${doingTasks?[index].dueDate}",
+                                  doingTasks?[index].dueDate ?? "yyyy-MM-dd",
                                 ),
                               ),
                             ),
@@ -271,7 +271,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           cells: [
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 130, //SET width
                                 child: Text(
                                   "${openTasks?[index].taskName}",
@@ -280,7 +280,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 10, //SET width
                                 child: Icon(
                                   openTasks?[index].priority == "HIGH"
@@ -301,7 +301,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 35, //SET width
                                 child: Text(
                                   "${openTasks?[index].category}",
@@ -309,10 +309,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 80, //SET width
                                 child: Text(
-                                  "${openTasks?[index].dueDate}",
+                                  openTasks?[index].dueDate ?? "yyyy-MM-dd",
                                 ),
                               ),
                             ),
@@ -387,7 +387,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           cells: [
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 130, //SET width
                                 child: Text(
                                   "${resolvedTasks?[index].taskName}",
@@ -396,7 +396,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 10, //SET width
                                 child: Icon(
                                   resolvedTasks?[index].priority == "HIGH"
@@ -422,7 +422,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 35, //SET width
                                 child: Text(
                                   "${resolvedTasks?[index].category}",
@@ -430,10 +430,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 80, //SET width
                                 child: Text(
-                                  "${resolvedTasks?[index].dueDate}",
+                                  resolvedTasks?[index].dueDate ?? "yyyy-MM-dd",
                                 ),
                               ),
                             ),
@@ -508,7 +508,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           cells: [
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 130, //SET width
                                 child: Text(
                                   "${closedTasks?[index].taskName}",
@@ -517,7 +517,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 10, //SET width
                                 child: Icon(
                                   closedTasks?[index].priority == "HIGH"
@@ -540,7 +540,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 35, //SET width
                                 child: Text(
                                   "${closedTasks?[index].category}",
@@ -548,10 +548,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 80, //SET width
                                 child: Text(
-                                  "${closedTasks?[index].dueDate}",
+                                  closedTasks?[index].dueDate ?? "yyyy-MM-dd",
                                 ),
                               ),
                             ),
