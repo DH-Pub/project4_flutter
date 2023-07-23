@@ -32,10 +32,10 @@ class RemoveProjectAlert extends StatelessWidget {
           style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
           onPressed: () {
             projectController.removeProject(prj.id).then((value) {
-              if (value == true) {
+              if (value is String) {
                 getAllProject();
                 Navigator.pop(context);
-              }
+              } else {}
             });
           },
           child: const Text(

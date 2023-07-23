@@ -79,8 +79,9 @@ class ProjectController {
     String teamId;
     await initPrefs();
     teamId = getTeamInPrefs().id;
+    String queryParameters = "teamId=$teamId";
     await projectApi.api
-        .post("${API_CONSTANTS.project}/create", data: {
+        .post("${API_CONSTANTS.project}/create?$queryParameters", data: {
           "name": name,
           "teamId": teamId,
         })
@@ -92,8 +93,8 @@ class ProjectController {
     return project;
   }
 
-  Future<bool?> removeProject(id) async {
-    bool? res;
+  Future<String?> removeProject(id) async {
+    String? res;
     await projectApi.api
         .delete("${API_CONSTANTS.project}/$id")
         .then((value) => res = value.data)
