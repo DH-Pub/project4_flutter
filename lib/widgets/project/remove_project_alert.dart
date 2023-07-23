@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proj4_flutter/controllers/project_controllers.dart';
-import 'package:proj4_flutter/models/project.dart';
+import 'package:proj4_flutter/models/project_1.dart';
 
 class RemoveProjectAlert extends StatelessWidget {
   final Function getAllProject;

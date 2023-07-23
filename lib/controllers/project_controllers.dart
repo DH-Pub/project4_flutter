@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:proj4_flutter/constants/storage_key.dart';
-import 'package:proj4_flutter/models/project.dart';
+import 'package:proj4_flutter/models/project_1.dart';
 import 'package:proj4_flutter/models/team.dart';
 import 'package:proj4_flutter/services/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -70,7 +70,7 @@ class ProjectController {
     return currentProject;
   }
 
-  Future<Project?> addProject(String name, String description) async {
+  Future<Project?> addProject(String name) async {
     if (name.trim().isEmpty) {
       errMsg = "Please enter a valid name";
       return null;
@@ -81,9 +81,8 @@ class ProjectController {
     teamId = getTeamInPrefs().id;
     await projectApi.api
         .post("${API_CONSTANTS.project}/create", data: {
-          "email": name,
+          "name": name,
           "teamId": teamId,
-          "description": description,
         })
         .then((value) => project = Project.fromJson(value.data))
         .catchError((e) {
@@ -105,28 +104,28 @@ class ProjectController {
     return res;
   }
 
-  Future<Project?> updateProject(id) async {
-    if (projectNameController.text.trim().isEmpty) {
-      errMsg = "Team name cannot be empty";
-      return null;
-    }
-    Project? project;
-    await projectApi.api.put("${API_CONSTANTS.team}/$id", data: {
-      "id": id,
-      "teamName": projectNameController.text,
-      "description": descriptionController.text,
-    }).then((value) async {
-      project = Project.fromJson(value.data);
-      prefs = await SharedPreferences.getInstance();
-      prefs.setString(
-        StorageKey.team,
-        json.encode(project!.toJson()),
-      );
-      await getAllProjects();
-    }).catchError((err) {
-      errMsg = err.response.data;
-      return null;
-    });
-    return project;
-  }
+  // Future<Project?> updateProject(id) async {
+  //   if (projectNameController.text.trim().isEmpty) {
+  //     errMsg = "Team name cannot be empty";
+  //     return null;
+  //   }
+  //   Project? project;
+  //   await projectApi.api.put("${API_CONSTANTS.team}/$id", data: {
+  //     "id": id,
+  //     "teamName": projectNameController.text,
+  //     "description": descriptionController.text,
+  //   }).then((value) async {
+  //     project = Project.fromJson(value.data);
+  //     prefs = await SharedPreferences.getInstance();
+  //     prefs.setString(
+  //       StorageKey.team,
+  //       json.encode(project!.toJson()),
+  //     );
+  //     await getAllProjects();
+  //   }).catchError((err) {
+  //     errMsg = err.response.data;
+  //     return null;
+  //   });
+  //   return project;
+  // }
 }

@@ -12,8 +12,6 @@ class ProjectAdd extends StatefulWidget {
 class _ProjectAddState extends State<ProjectAdd> {
   ProjectController projectController = ProjectController();
   TextEditingController nameController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -27,43 +25,34 @@ class _ProjectAddState extends State<ProjectAdd> {
                   labelText: "Enter Project Name",
                 ),
               ),
-              TextFormField(
-                controller: descriptionController,
-                decoration: const InputDecoration(
-                  labelText: "Enter Description",
-                ),
-              )
             ],
           ),
         ),
         const SizedBox(width: 10),
         ElevatedButton(
-          onPressed:
-              nameController.text == '' || descriptionController.text == ''
-                  ? null
-                  : () {
-                      projectController
-                          .addProject(
-                              nameController.text, descriptionController.text)
-                          .then((value) {
-                        if (value != null) {
-                          setState(() {
-                            nameController.text = '';
-                            descriptionController.text = '';
-                          });
-                          widget.getAllProjects();
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                projectController.errMsg ?? "",
-                                style: const TextStyle(color: Colors.red),
-                              ),
-                            ),
-                          );
-                        }
+          onPressed: nameController.text == ''
+              ? null
+              : () {
+                  projectController
+                      .addProject(nameController.text)
+                      .then((value) {
+                    if (value != null) {
+                      setState(() {
+                        nameController.text = '';
                       });
-                    },
+                      widget.getAllProjects();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            projectController.errMsg ?? "",
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      );
+                    }
+                  });
+                },
           child: const Row(
             children: [
               Icon(
