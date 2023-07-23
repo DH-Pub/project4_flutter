@@ -28,14 +28,6 @@ class ProjectList extends StatelessWidget {
           margin: const EdgeInsets.symmetric(vertical: 5.0),
           child: Row(
             children: [
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                  color: Colors.grey,
-                ),
-              ),
               const SizedBox(width: 20),
               Expanded(
                 child: Column(
@@ -44,7 +36,6 @@ class ProjectList extends StatelessWidget {
                       prj.name,
                       style: const TextStyle(fontSize: 16),
                     ),
-                    Text(prj.name),
                   ],
                 ),
               ),

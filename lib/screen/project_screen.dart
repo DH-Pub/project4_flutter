@@ -16,6 +16,13 @@ class ProjectScreen extends StatefulWidget {
 }
 
 class _ProjectScreenState extends State<ProjectScreen> {
+  List<ProjectDetail>? projects;
+  bool isCreate = false;
+  Future getProjects() async {
+    ProjectController projectController = ProjectController();
+    projects = await projectController.getAllProjects();
+  }
+
   ProjectController projectController = ProjectController();
   ProjectDetail currentProject = ProjectDetail('', '', '', '');
   bool hasAuth = false;
@@ -25,6 +32,29 @@ class _ProjectScreenState extends State<ProjectScreen> {
       CircularProgressIndicator(),
     ],
   );
+
+  @override
+  void initState() {
+    getProjects().then((_) {
+      if (projects == null) {
+        mainContent = const Text(
+          "Error",
+          style: TextStyle(color: Colors.red),
+        );
+      } else {
+        if (projects!.isNotEmpty) {
+          mainContent = ProjectList(
+              projects: projects!,
+              showRemoveDialog: _showRemoveDialog,
+              hasAuth: hasAuth,
+              currentProject: currentProject);
+        } else {
+          isCreate = true;
+        }
+      }
+    });
+    super.initState();
+  }
 
   Future<void> _showRemoveDialog(
     context,
@@ -53,6 +83,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
           currentProject: currentProject,
         );
       }
+      setState(() {});
     });
   }
 

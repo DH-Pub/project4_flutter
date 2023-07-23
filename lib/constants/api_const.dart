@@ -5,5 +5,5 @@ class API_CONSTANTS {
   static const String team = "$baseUrl/team";
   static const String task = "$baseUrl/task";
   static const String myTasks = "$baseUrl/task/myTasks";
-  static const String project = "$baseUrl/project";
+  static const String project = "$baseUrl/projects";
 }
