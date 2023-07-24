@@ -5,10 +5,10 @@ class Project {
 
   Project({this.id, this.name, this.team});
 
-  Project.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    team = json['team'] != null ? new Team.fromJson(json['team']) : null;
+  Project.fromJson(Map<String, dynamic> project) {
+    id = project['id'];
+    name = project['name'];
+    team = project['team'] != null ? new Team.fromJson(project['team']) : null;
   }
 
   Map<String, dynamic> toJson() {

@@ -6,6 +6,7 @@ import 'package:proj4_flutter/screen/error.dart';
 import 'package:proj4_flutter/screen/home_screen.dart';
 import 'package:proj4_flutter/screen/login.dart';
 import 'package:proj4_flutter/screen/members_screen.dart';
+import 'package:proj4_flutter/screen/project_screen.dart';
 import 'package:proj4_flutter/screen/splash.dart';
 import 'package:proj4_flutter/screen/team_detail.dart';
 import 'package:proj4_flutter/screen/teams_screen.dart';
@@ -71,6 +72,12 @@ class AppRouter {
           return const MaterialPage(child: MembersScreen());
         },
       ),
+      GoRoute(
+          name: APP_PAGE.projects.toName,
+          path: APP_PAGE.projects.toPath,
+          pageBuilder: ((context, state) {
+            return const MaterialPage(child: ProjectScreen());
+          }))
     ],
     errorPageBuilder: (context, state) {
       return MaterialPage(
@@ -94,7 +101,8 @@ class AppRouter {
         return splashLocation;
       } else if (isInitialized && !isLogedIn && !isGoingToLogin) {
         return loginLocation;
-      } else if ((isLogedIn && isGoingToLogin) || (isInitialized && isGoingToInit)) {
+      } else if ((isLogedIn && isGoingToLogin) ||
+          (isInitialized && isGoingToInit)) {
         return teamsLocation;
       } else {
         return null;
