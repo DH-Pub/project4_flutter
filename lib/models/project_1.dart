@@ -1,16 +1,16 @@
 class Project {
   String id = '';
   String name = '';
-  String teamId = '';
+  String team_id = '';
   String createAt = '';
 
-  Project(this.id, this.name, this.teamId, this.createAt);
+  Project(this.id, this.name, this.team_id, this.createAt);
   Project.noArgs();
 
   Project.fromJson(Map<String, dynamic> project) {
     id = project["id"] ?? '';
     name = project["name"] ?? '';
-    teamId = project["teamId"] ?? '';
+    team_id = project["team_id"] ?? '';
     createAt = project["CreateAt"] ?? '';
   }
 
@@ -18,7 +18,7 @@ class Project {
     return {
       'id': id,
       'name': name,
-      'teamId': teamId,
+      'team_id': team_id,
       'createAt': createAt,
     };
   }
@@ -27,22 +27,22 @@ class Project {
 class ProjectDetail {
   String id = '';
   String name = '';
-  String teamId = '';
+  String team_id = '';
   String createAt = '';
 
-  ProjectDetail(this.id, this.name, this.teamId, this.createAt);
+  ProjectDetail(this.id, this.name, this.team_id, this.createAt);
 
   ProjectDetail.fromJson(Map<String, dynamic> projectDetails) {
     id = projectDetails["id"] ?? '';
     name = projectDetails["name"] ?? '';
-    teamId = projectDetails["teamId"] ?? '';
+    team_id = projectDetails["team_id"] ?? '';
     createAt = projectDetails["CreateAt"] ?? '';
   }
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,
-      'teamId': teamId,
+      'team_id': team_id,
       'createAt': createAt,
     };
   }
