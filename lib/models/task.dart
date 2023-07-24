@@ -13,7 +13,7 @@ class Task {
   String? startDate;
   String? endDate;
   String? dueDate;
-  List<String>? files;
+  String? files;
   String? status;
   int? position;
   String? version;

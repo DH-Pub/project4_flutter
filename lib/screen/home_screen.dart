@@ -19,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late Team team = Team('', '', '', '');
   late TeamController teamController = TeamController();
   late List<Task>? tasks = [];
+  late List<Task>? renderTasks = [];
   late List<Task>? doingTasks = [];
   late List<Task>? openTasks = [];
   late List<Task>? resolvedTasks = [];
@@ -26,31 +27,53 @@ class _HomeScreenState extends State<HomeScreen> {
   late Task task = Task();
   late TaskController taskController = TaskController();
 
-  Future getTeams() async {
+  Future getAllTasks() async {
     tasks = await taskController.getAllTasks();
     setState(() {});
   }
 
-  Future getTasksByUser() async {
-    tasks = await taskController.getTaskByUser("MainAdmin", "1689772797132");
+  Future getTasksByUser(String userId, String projectId) async {
+    tasks = await taskController.getTaskByUser(userId, projectId);
     setState(() {});
   }
 
   @override
   void initState() {
-    getTasksByUser().then((_) {
-      for (var task in tasks!) {
-        if (task.status == "IN PROGRESS") {
-          doingTasks!.add(task);
-        } else if (task.status == "OPEN") {
-          openTasks!.add(task);
-        } else if (task.status == "RESOLVED") {
-          resolvedTasks!.add(task);
-        } else {
-          closedTasks!.add(task);
+    String currentTeam;
+    teamController.initPrefs().then((_) {
+      currentTeam = teamController.getTeamInPrefs().id;
+      getAllTasks().then((_) {
+        for (Task task in tasks!) {
+          if (task.project?.team?.id == currentTeam) {
+            renderTasks!.add(task);
+          }
         }
-      }
+        for (var task in renderTasks!) {
+          if (task.status == "IN PROGRESS") {
+            doingTasks!.add(task);
+          } else if (task.status == "OPEN") {
+            openTasks!.add(task);
+          } else if (task.status == "RESOLVED") {
+            resolvedTasks!.add(task);
+          } else {
+            closedTasks!.add(task);
+          }
+        }
+      });
     });
+    // getAllTasks().then((_) {
+    //   for (var task in tasks!) {
+    //     if (task.status == "IN PROGRESS") {
+    //       doingTasks!.add(task);
+    //     } else if (task.status == "OPEN") {
+    //       openTasks!.add(task);
+    //     } else if (task.status == "RESOLVED") {
+    //       resolvedTasks!.add(task);
+    //     } else {
+    //       closedTasks!.add(task);
+    //     }
+    //   }
+    // });
     super.initState();
   }
 
@@ -80,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.amber,
                     ),
                     child: Text(
-                      "IN PROGRESS: ${doingTasks?.length} ${doingTasks!.length > 1 ? "tickest" : "ticket"}",
+                      "IN PROGRESS: ${doingTasks?.length} ${doingTasks!.length > 1 ? "tickets" : "ticket"}",
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -132,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           cells: [
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 130, //SET width
                                 child: Text(
                                   "${doingTasks?[index].taskName}",
@@ -141,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 10, //SET width
                                 child: Icon(
                                   doingTasks?[index].priority == "HIGH"
@@ -162,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 35, //SET width
                                 child: Text(
                                   "${doingTasks?[index].category}",
@@ -170,10 +193,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 80, //SET width
                                 child: Text(
-                                  "${doingTasks?[index].dueDate}",
+                                  doingTasks?[index].dueDate ?? "yyyy-MM-dd",
                                 ),
                               ),
                             ),
@@ -196,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.green,
                     ),
                     child: Text(
-                      "OPEN: ${openTasks?.length} ${openTasks!.length > 1 ? "tickest" : "ticket"}",
+                      "OPEN: ${openTasks?.length} ${openTasks!.length > 1 ? "tickets" : "ticket"}",
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -248,7 +271,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           cells: [
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 130, //SET width
                                 child: Text(
                                   "${openTasks?[index].taskName}",
@@ -257,7 +280,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 10, //SET width
                                 child: Icon(
                                   openTasks?[index].priority == "HIGH"
@@ -278,7 +301,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 35, //SET width
                                 child: Text(
                                   "${openTasks?[index].category}",
@@ -286,10 +309,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 80, //SET width
                                 child: Text(
-                                  "${openTasks?[index].dueDate}",
+                                  openTasks?[index].dueDate ?? "yyyy-MM-dd",
                                 ),
                               ),
                             ),
@@ -312,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.red,
                     ),
                     child: Text(
-                      "RESOLVED: ${resolvedTasks?.length} ${resolvedTasks!.length > 1 ? "tickest" : "ticket"}",
+                      "RESOLVED: ${resolvedTasks?.length} ${resolvedTasks!.length > 1 ? "tickets" : "ticket"}",
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -364,7 +387,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           cells: [
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 130, //SET width
                                 child: Text(
                                   "${resolvedTasks?[index].taskName}",
@@ -373,7 +396,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 10, //SET width
                                 child: Icon(
                                   resolvedTasks?[index].priority == "HIGH"
@@ -399,7 +422,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 35, //SET width
                                 child: Text(
                                   "${resolvedTasks?[index].category}",
@@ -407,10 +430,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 80, //SET width
                                 child: Text(
-                                  "${resolvedTasks?[index].dueDate}",
+                                  resolvedTasks?[index].dueDate ?? "yyyy-MM-dd",
                                 ),
                               ),
                             ),
@@ -433,7 +456,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.grey,
                     ),
                     child: Text(
-                      "CLOSED: ${closedTasks?.length} ${closedTasks!.length > 1 ? "tickest" : "ticket"}",
+                      "CLOSED: ${closedTasks?.length} ${closedTasks!.length > 1 ? "tickets" : "ticket"}",
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -485,7 +508,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           cells: [
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 130, //SET width
                                 child: Text(
                                   "${closedTasks?[index].taskName}",
@@ -494,7 +517,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 10, //SET width
                                 child: Icon(
                                   closedTasks?[index].priority == "HIGH"
@@ -517,7 +540,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 35, //SET width
                                 child: Text(
                                   "${closedTasks?[index].category}",
@@ -525,10 +548,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 80, //SET width
                                 child: Text(
-                                  "${closedTasks?[index].dueDate}",
+                                  closedTasks?[index].dueDate ?? "yyyy-MM-dd",
                                 ),
                               ),
                             ),
