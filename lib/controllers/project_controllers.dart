@@ -41,13 +41,18 @@ class ProjectController {
   }
 
   Future<List<ProjectDetail>?> getAllProjects() async {
+    String teamId;
+    await initPrefs();
+    teamId = getTeamInPrefs().id;
     List<ProjectDetail>? projects;
     await projectApi.api.get("${API_CONSTANTS.project}/getAll").then((value) {
       List<dynamic> data = value.data;
       projects = [];
       for (Map<String, dynamic> m in data) {
         ProjectDetail project = ProjectDetail.fromJson(m);
-        projects!.add(project);
+        if (project.team_id == teamId) {
+          projects!.add(project);
+        }
       }
     }).catchError((e) {
       errMsg = e.response.data;
@@ -56,18 +61,19 @@ class ProjectController {
     return projects;
   }
 
-  Future<ProjectDetail?> getCurrentProject(String id) async {
-    ProjectDetail? currentProject;
-    await projectApi.api.get("${API_CONSTANTS.project}/get/$id").then((value) {
-      currentProject = currentProject = ProjectDetail.fromJson(value.data);
-      prefs.setString(
-        StorageKey.currentProject,
-        json.encode(currentProject!.toJson()),
-      );
+  Future<List<ProjectDetail>?> getCurrentProject() async {
+    String teamId;
+    await initPrefs();
+    teamId = getTeamInPrefs().id;
+    List<ProjectDetail>? projects;
+    await projectApi.api
+        .get("${API_CONSTANTS.project}/get/$teamId")
+        .then((value) {
+      projects = value.data;
     }).catchError((e) {
       errMsg = e.response.data;
     });
-    return currentProject;
+    return projects;
   }
 
   Future<Project?> addProject(String name) async {
